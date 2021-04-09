@@ -1,0 +1,537 @@
+<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8"></div>
+<div class="container-fluid">
+  <div class="card maincard">
+    <div class="card-head">
+      <h3 class="col-md-3">Produits</h3>
+      <div class="col-md-6 row">
+        <input
+          placeholder="Search"
+          type="text"
+          class="form-control-alternative text-center form-control col-md-11"
+          style="margin-right: 5px; max-height: 30px"
+        />
+        <button
+          type="button"
+          class="btn-icon btn-round btn-2 btn btn-info btn-sm"
+          style="border-radius: 16px; height: fit-content"
+        >
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+      <div class="col-md-3" style="text-align: end">
+        <div class="col-md-3" style="display: contents;" ngbDropdown >
+          <a
+            class="btn btn-info btn-sm "
+            ngbDropdownToggle
+          >
+          <span class="btn-inner--icon"
+          ><i class="ni ni-align-center" style="padding-right: 6px"></i></span
+        ><span class="btn-inner--text">Sort</span>
+          </a>
+          <div
+            ngbDropdownMenu
+            class="dropdown-menu-right dropdown-menu-arrow"
+          >
+          <a class="dropdown-item" (click)="filterNameAsc()"><i class="fas fa-sort-up"></i>Ascendant</a>
+          <a class="dropdown-item" (click)="filterNameDesc()" > <i class="fas fa-sort-down pb-2"></i>Descendant</a>
+          </div>
+        </div>
+        <button
+        type="button"
+        class="btn btn-info btn-sm col-md-4"
+        style="justify-self: end;"
+        (click)="open(classic, '', '')"
+      >
+        <span class="btn-inner--icon"
+          ><i class="fas fa-filter" style="padding-right: 3px"></i></span
+        ><span class="btn-inner--text">Filter</span>
+      </button>
+
+        <button
+          type="button"
+          class="btn btn-info btn-sm col-md-4"
+          style="justify-self: end;"
+          (click)="open(classic, '', '')"
+        >
+          <span class="btn-inner--icon"
+            ><i class="ni ni-fat-add" style="padding-right: 3px"></i></span
+          ><span class="btn-inner--text">Ajouter</span>
+        </button>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table align-items-center table-flush">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Produit</th>
+              <th scope="col">Référence</th>
+              <th scope="col">Prix</th>
+              <th scope="col">Catégorie</th>
+              <th scope="col">Fournisseur</th>
+              <th scope="col">Dépot</th>
+              <th scope="col">Quantité vendue</th>
+              <th scope="col">Quantité en Stock</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody class="">
+            <tr *ngFor="let Product of Products">
+              <th scope="row">
+                <div class="media align-items-center">
+                  <a href="#" class="mr-3">
+                    <img
+                      class="prodimg"
+                      alt="Image placeholder"
+                      src="../../../assets/img/products/{{ Product.img }}"
+                    />
+                  </a>
+                  <div class="media-body">
+                    <span class="mb-0 text-sm">{{ Product.name }}</span>
+                  </div>
+                </div>
+              </th>
+              <td>{{ Product.ref }}</td>
+              <td style="color: #2dce89">{{ Product.price }} TND</td>
+              <td>
+                <img
+                  class="prodimg"
+                  alt="Image placeholder"
+                  src="../../../assets/img/icons/common/{{
+                    Product.category
+                  }}.png"
+                />
+                {{ Product.category }}
+              </td>
+              <td>{{ Product.supplier }}</td>
+              <td>
+                <span class="badge badge-dot mr-4">
+                  <i class="bg-warning"> </i>
+
+                  <span class="status"> {{ Product.deposit }}</span>
+                </span>
+              </td>
+              <td style="text-align: center">{{ Product.qtesold }}</td>
+              <td style="text-align: center">
+                {{ Product.qtestock }}
+                <div class="progress">
+                  <div
+                    class="progress-bar"
+                    [ngClass]="{
+                      'bg-danger':
+                        (Product.qtestock * 100) /
+                          (Product.qtestock + Product.qtesold) <
+                        35,
+                      'bg-warning':
+                        (Product.qtestock * 100) /
+                          (Product.qtestock + Product.qtesold) <
+                        70,
+                      'bg-success':
+                        (Product.qtestock * 100) /
+                          (Product.qtestock + Product.qtesold) >=
+                        70
+                    }"
+                    role="progressbar"
+                    aria-valuenow="60"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    [style.width.%]="
+                      (Product.qtestock * 100) /
+                      (Product.qtestock + Product.qtesold)
+                    "
+                  ></div>
+                </div>
+              </td>
+
+              <td class="text-right">
+                <div ngbDropdown placement="bottom-right">
+                  <a
+                    class="btn btn-sm btn-icon-only text-light"
+                    ngbDropdownToggle
+                  >
+                    <i class="fas fa-ellipsis-v"></i>
+                  </a>
+                  <div
+                    ngbDropdownMenu
+                    class="dropdown-menu-right dropdown-menu-arrow"
+                  >
+                    <a class="dropdown-item" (click)="open(inspect, '', '');inspectProduct = Product;">Inspecter</a>
+                    <a class="dropdown-item" (click)="open(edit, '', '');editProduct = Product;editprodimg=editProduct.img">Modifier</a>
+                    <a class="dropdown-item" (click)="open(delete, '', '');deleteProduct = Product;">Supprimer</a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="py-4 card-footer">
+      <div class="row">
+        <div class="col-9">
+          <button
+          type="button"
+          class="btn btn-primary btn-sm mb-2"
+          style="justify-self: end"
+        >
+          <span class="btn-inner--icon"
+            > <lord-icon
+            *ngIf="true"
+            src="../../../assets/lottie/56-document-outline-edited.json"
+            trigger="hover"
+            colors="primary:#FFFFFF,secondary:#FFFFFF"
+            stroke="100"
+            style="width: 25px; height: 25px;padding-bottom:3px"
+          ></lord-icon></span
+          ><span class="btn-inner--text">Export CSV</span>
+        </button>
+        <button
+        type="file"
+        class="btn btn-primary btn-sm mb-2"
+        style="justify-self: end"
+
+      >
+
+        <span class="btn-inner--icon">
+           <lord-icon
+           *ngIf="true"
+          src="../../../assets/lottie/259-share-arrow-outline-edited.json"
+          trigger="hover"
+          colors="primary:#FFFFFF,secondary:#FFFFFF"
+          stroke="100"
+          style="width: 25px; height: 25px;padding-bottom:3px"
+        ></lord-icon></span
+        ><span class="btn-inner--text">Import CSV</span>
+      </button>
+      <input type="file"  (change)="fileChangeListener($event)">
+    </div>
+      <nav aria-label="..." class="col-3">
+        <nav
+          class="pagination justify-content-end mb-0"
+          aria-label="pagination"
+        >
+          <ul class="justify-content-end mb-0 pagination">
+            <li class="disabled page-item">
+              <a href="#pablo" tabindex="-1" class="page-link"
+                ><i class="fas fa-angle-left"></i
+                ><span class="sr-only">Previous</span></a
+              >
+            </li>
+            <li class="active page-item">
+              <a href="#pablo" class="page-link">1</a>
+            </li>
+            <li class="page-item">
+              <a href="#pablo" class="page-link"
+                >2 <span class="sr-only">(current)</span></a
+              >
+            </li>
+            <li class="page-item"><a href="#pablo" class="page-link">3</a></li>
+            <li class="page-item">
+              <a href="#pablo" class="page-link"
+                ><i class="fas fa-angle-right"></i
+                ><span class="sr-only">Next</span></a
+              >
+            </li>
+          </ul>
+        </nav>
+      </nav>
+    </div>
+    </div>
+  </div>
+</div>
+<ng-template #classic let-c="close" let-d="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-title-default">Ajouter un produit</h6>
+      <button
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="d('Cross click')"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body col">
+      <form>
+        <div class="m-auto" style="width: fit-content;margin-bottom:20px !important">
+        <img src="../../../assets/img/icons/common/{{prodimg}}" class="productimg" alt="">
+      </div>
+        <div class="custom-file input-group input-group-sm"  style="margin-bottom: 12px">
+          <div class="input-group-prepend">
+          <input type="file" class="custom-file-input form-control form-control-alternative" id="customFileLang" lang="en" (change)="processFile($event)">
+          <label class="custom-file-label" for="customFileLang">Upload an image</label>
+          </div>
+        </div>
+      <h3>Nom du produit:</h3>
+      <input
+        placeholder="Nom du produit"
+        type="text"
+        class="form-control-alternative text-center form-control col-md-12"
+        style="margin-bottom: 12px"
+      />
+      <h3>Reference:</h3>
+      <input
+        placeholder="numero de reference"
+        type="number"
+        class="form-control-alternative text-center form-control col-md-12"
+        style="margin-bottom: 12px"
+      />
+
+      <h3>Catégorie:</h3>
+      <div style="margin-bottom: 12px" class="form-group">
+
+        <select class="form-control-alternative text-center form-control" id="exampleFormControlSelect1">
+          <option *ngFor="let categorie of Categories">{{categorie.name}}</option>
+
+        </select>
+      </div>
+      <h3>Dépôt:</h3>
+      <div style="margin-bottom: 12px" class="form-group">
+
+        <select class="form-control-alternative text-center form-control" id="exampleFormControlSelect2">
+          <option *ngFor="let depot of Depots">{{depot}}</option>
+
+        </select>
+      </div>
+
+      <h3>Quantité:</h3>
+      <input
+        placeholder="Quantité"
+        type="number"
+        class="form-control-alternative text-center form-control col-md-12"
+        style="margin-bottom: 12px"
+      />
+      <h3>Prix:</h3>
+      <div class="row col" style="margin-bottom: 12px">
+        <input
+          placeholder="prix en dinar"
+          type="text"
+          class="form-control-alternative text-center form-control col-md-10"
+          style="margin-bottom: 12px; margin-right: 0"
+        />
+        <span
+          style="
+            margin-left: 5%;
+            margin-top: 8px;
+            font-weight: bold;
+            color: #2dce89;
+          "
+          >TND</span
+        >
+      </div>
+    </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-link"
+        data-dismiss="modal"
+        (click)="c('Close click')"
+      >
+        Annuler
+      </button>
+      <button type="button" class="btn btn-primary ml-auto">Enregistrer</button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #edit let-c="close" let-d="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-title-default">Modifier le produit</h6>
+      <button
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="d('Cross click')"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body col">
+      <form>
+        <div class="m-auto" style="width: fit-content;margin-bottom:20px !important">
+        <img src="../../../assets/img/products/{{editprodimg}}" class="productimg" alt="">
+      </div>
+        <div class="custom-file input-group input-group-sm"  style="margin-bottom: 12px">
+          <div class="input-group-prepend">
+          <input type="file" class="custom-file-input form-control form-control-alternative" id="customFileLang" lang="en" (change)="processFile2($event)">
+          <label class="custom-file-label" for="customFileLang">Upload an image</label>
+          </div>
+        </div>
+      <h3>Nom du produit</h3>
+      <input
+        placeholder="Nom du produit"
+        type="text"
+        [value]="editProduct.name"
+        class="form-control-alternative text-center form-control col-md-12"
+        style="margin-bottom: 12px"
+      />
+      <h3>Reference:</h3>
+      <input
+        placeholder="numero de reference"
+        type="number"
+        [value]="editProduct.ref"
+        class="form-control-alternative text-center form-control col-md-12"
+        style="margin-bottom: 12px"
+      />
+
+      <h3>Catégorie:</h3>
+      <div style="margin-bottom: 12px" class="form-group">
+
+        <select class="form-control-alternative text-center form-control" id="exampleFormControlSelect1" [(ngModel)]="editProduct.category" [ngModelOptions]="{standalone: true}" >
+          <option *ngFor="let categorie of Categories" [value]="categorie.name">{{categorie.name}}</option>
+
+        </select>
+      </div>
+      <h3>Dépôt:</h3>
+      <div style="margin-bottom: 12px" class="form-group">
+
+        <select class="form-control-alternative text-center form-control" id="exampleFormControlSelect2" [(ngModel)]="editProduct.deposit" [ngModelOptions]="{standalone: true}">
+          <option *ngFor="let depot of Depots" [value]="depot" >{{depot}}</option>
+
+        </select>
+      </div>
+
+      <h3>Quantité:</h3>
+      <input
+        placeholder="Quantité"
+        type="number"
+        [value]="editProduct.qtestock"
+        class="form-control-alternative text-center form-control col-md-12"
+        style="margin-bottom: 12px"
+      />
+      <h3>Prix:</h3>
+      <div class="row col" style="margin-bottom: 12px">
+        <input
+          placeholder="prix en dinar"
+          type="text"
+          [value]="editProduct.price"
+          class="form-control-alternative text-center form-control col-md-10"
+          style="margin-bottom: 12px; margin-right: 0"
+        />
+        <span
+          style="
+            margin-left: 5%;
+            margin-top: 8px;
+            font-weight: bold;
+            color: #2dce89;
+          "
+          >TND</span
+        >
+      </div>
+    </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-link"
+        data-dismiss="modal"
+        (click)="c('Close click')"
+      >
+        Annuler
+      </button>
+      <button type="button" class="btn btn-primary ml-auto">Enregistrer</button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #delete let-c="close" let-d="dismiss">
+  <div class="modal-content bg-gradient-danger">
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-title-notification" style="color:whitesmoke">Faite attention</h6>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="d('Cross click')">
+        <span style="color:whitesmoke" aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="py-3 text-center">
+        <i style="color: whitesmoke;" class="ni ni-bell-55 ni-3x"></i>
+        <h4 class="heading mt-4" style="color: whitesmoke;">êtes-vous sûr de vouloir supprimer ce produit!</h4>
+        <p style="color: whitesmoke;">{{deleteProduct.ref}} {{deleteProduct.name}}.</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-link text-white " data-dismiss="modal" (click)="c('Close click')">Annuler</button>
+      <button type="button" class="btn btn-white ml-auto">Supprimer</button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #inspect let-c="close" let-d="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-title-default">{{inspectProduct.ref}}</h6>
+      <button
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="d('Cross click')"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body col">
+
+        <div class="m-auto" style="width: fit-content;margin-bottom:50px !important">
+        <img src="../../../assets/img/products/{{inspectProduct.img}}" class="inspectImg" alt="">
+
+
+      </div>
+      <div class="row col-12">
+      <div class="row col-12">
+      <h3   class="col-10 headers">Nom du produit:</h3>
+      <h5 class="m-auto col-2 headers" >{{inspectProduct.name}}</h5>
+    </div>
+    <div class="row col-12">
+      <h3   class="col-10 headers">Prix:</h3>
+      <h5 class="m-auto col-2 headers" >{{inspectProduct.price}}TND</h5>
+    </div>
+    <div class="row col-12 ">
+      <h3   class="col-10 headers">Categorie:</h3>
+      <h5 class="m-auto col-2 headers" >{{inspectProduct.category}}</h5>
+    </div>
+    <div class="row col-12">
+      <h3   class="col-10 headers">Fournisseur:</h3>
+      <h5 class="m-auto col-2 headers" >{{inspectProduct.supplier}}</h5>
+    </div>
+    <div class="row col-12">
+      <h3   class="col-10 headers">Dépôt:</h3>
+      <h5 class="m-auto col-2 headers" >{{inspectProduct.deposit}}</h5>
+      </div>
+      <div class="row col-12">
+        <h3    class="col-10 headers">Quantité vendue:</h3>
+        <h5 class="m-auto col-2 headers" >{{inspectProduct.qtesold}}</h5>
+      </div>
+      <div class="row col-12">
+        <h3   class="col-10 headers">Quantité en stock:</h3>
+        <h5 class="m-auto col-2 headers" >{{inspectProduct.qtestock}}</h5>
+      </div>
+      <div class="row col-12">
+        <h3   class="col-10 headers">Détails:</h3>
+        <h5 class="m-auto col-2 headers" >{{inspectProduct.details}}</h5>
+      </div>
+      <div class="row col-12">
+        <h3   class="col-10 headers">Description:</h3>
+
+      </div>
+      <h5 class="m-auto col-11 " style="text-align: justify;
+  text-justify:auto;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis sunt labore error suscipit molestias quos nostrum incidunt enim dolor placeat dolorem mollitia, voluptates ipsam reiciendis sequi cum eveniet rem distinctio.</h5>
+    </div>
+
+
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-link"
+        data-dismiss="modal"
+        (click)="c('Close click')"
+      >
+        Fermer
+      </button>
+
+    </div>
+  </div>
+</ng-template>

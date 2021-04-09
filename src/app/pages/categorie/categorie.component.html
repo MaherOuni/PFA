@@ -1,0 +1,126 @@
+<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8"></div>
+<div class="container-fluid">
+  <div class="card maincard">
+    <div class="card-head">
+      <h3 class="col-md-3">Categories</h3>
+      <div class="col-md-6 row">
+        <input
+          placeholder="Search"
+          type="text"
+          class="form-control-alternative text-center form-control col-md-11"
+          style="margin-right: 5px; max-height: 30px"
+        />
+        <button
+          type="button"
+          class="btn-icon btn-round btn-2 btn btn-info btn-sm"
+          style="border-radius: 16px; height: fit-content"
+        >
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+      <div class="col-md-3" style="text-align: end">
+        <button type="button" class="btn btn-info btn-sm col-md-3 mb-2">
+          <span class="btn-inner--icon"
+            ><i class="ni ni-align-center" style="padding-right: 6px"></i></span
+          ><span class="btn-inner--text">Sort</span>
+        </button>
+        <button type="button" class="btn btn-info btn-sm col-md-4 mb-2">
+          <i class="fas fa-filter"></i
+          ><span class="btn-inner--text">Filter</span>
+        </button>
+        <button
+          type="button"
+          class="btn btn-info btn-sm col-md-4n mb-2"
+          style="justify-self: end"
+        >
+          <span class="btn-inner--icon"
+            ><i class="ni ni-fat-add" style="padding-right: 3px"></i></span
+          ><span class="btn-inner--text">Ajouter</span>
+        </button>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table align-items-center table-flush">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nom</th>
+              <th scope="col">Image</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody class="">
+            <tr *ngFor="let Category of Categories">
+              <th scope="row">
+                {{ Category.id }}
+              </th>
+              <td>{{ Category.name }}</td>
+              <td>
+                <div class="media align-items-center">
+                  <a href="#" class="mr-3">
+                    <img
+                      class="prodimg"
+                      alt="Image placeholder"
+                      src="../../../assets/img/icons/common/{{ Category.img }}"
+                    />
+                  </a>
+                </div>
+              </td>
+              <td class="text-right">
+                <div ngbDropdown placement="bottom-right">
+                  <a
+                    class="btn btn-sm btn-icon-only text-light"
+                    ngbDropdownToggle
+                  >
+                    <i class="fas fa-ellipsis-v"></i>
+                  </a>
+                  <div
+                    ngbDropdownMenu
+                    class="dropdown-menu-right dropdown-menu-arrow"
+                  >
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="py-4 card-footer">
+      <nav aria-label="...">
+        <nav
+          class="pagination justify-content-end mb-0"
+          aria-label="pagination"
+        >
+          <ul class="justify-content-end mb-0 pagination">
+            <li class="disabled page-item">
+              <a href="#pablo" tabindex="-1" class="page-link"
+                ><i class="fas fa-angle-left"></i
+                ><span class="sr-only">Previous</span></a
+              >
+            </li>
+            <li class="active page-item">
+              <a href="#pablo" class="page-link">1</a>
+            </li>
+            <li class="page-item">
+              <a href="#pablo" class="page-link"
+                >2 <span class="sr-only">(current)</span></a
+              >
+            </li>
+            <li class="page-item"><a href="#pablo" class="page-link">3</a></li>
+            <li class="page-item">
+              <a href="#pablo" class="page-link"
+                ><i class="fas fa-angle-right"></i
+                ><span class="sr-only">Next</span></a
+              >
+            </li>
+          </ul>
+        </nav>
+      </nav>
+    </div>
+  </div>
+</div>

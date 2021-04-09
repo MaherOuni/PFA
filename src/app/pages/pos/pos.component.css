@@ -1,0 +1,126 @@
+#button-addon2 {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+input {
+  border: 1px solid #d2b48c;
+}
+.badge {
+  margin: 0 3px 3px 0;
+  height: min-content;
+  cursor: pointer;
+}
+.badge:hover {
+  color: whitesmoke;
+  background-color: #fc8825;
+}
+#all:hover {
+  color: whitesmoke;
+  background-color: #f80031;
+}
+.categoriesDiv {
+  height: 45px;
+  display: flex;
+  overflow: hidden;
+  overflow-x: scroll;
+}
+#prodlist {
+  margin: auto;
+  padding: 4px;
+}
+.card-img-top {
+  height: 150px;
+  width: 100px;
+  margin: auto;
+}
+.cardContent {
+  padding: 5px;
+}
+.titlecard {
+  color: #464f4f;
+  font-size: 16px;
+  font-weight: 700;
+}
+.detail {
+  color: #464f4f;
+  font-size: 10px;
+  font-weight: 400;
+}
+.prodcard {
+  margin: 5px;
+  box-shadow: 4px 4px 15px #464f4f1f;
+  cursor: pointer;
+  top: 0px;
+  transition: 0.3s;
+}
+.prodcard:hover {
+  position: relative;
+  top: -5px;
+}
+.maincard {
+  box-shadow: 5px 5px 20px #464f4f3a;
+}
+
+#btn-add {
+  margin: auto;
+  flex: 0;
+  padding:5px;
+}
+#btn-trash{
+
+}
+.m-top {
+  margin-top: 12px;
+}
+.qte {
+  width: auto;
+  margin: auto;
+  padding: 0;
+  text-align: center;
+  font-weight: 400;
+}
+.payment {
+  width: 100%;
+  margin-right: 0 !important;
+  margin-left: 0;
+  border-radius: 6px;
+  background: #464f4f15;
+}
+.payment h4 {
+  margin-bottom: 12px;
+  margin-top: 12px;
+  color: #464f4f;
+}
+.validation {
+  text-align: center;
+}
+
+.products {
+  margin-left: 0px;
+  height: 505px;
+  overflow-y: scroll;
+}
+.paddingl-1 {
+  padding-left: 0.5rem !important;
+}
+
+.paddingl-11 th {
+  padding-left: 0.5rem !important;
+}
+#content .typ {
+  color: rgb(31, 31, 31);
+  font-size: 15px;
+  font-weight: 500;
+}
+#content .fact{
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: rgb(48, 48, 48);
+}
+#content .place{
+  text-align: center;
+  font-size: 20px;
+  font-weight: 500;
+  color: rgb(48, 48, 48);
+}
