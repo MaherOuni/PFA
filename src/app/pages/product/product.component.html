@@ -36,16 +36,7 @@
           <a class="dropdown-item" (click)="filterNameDesc()" > <i class="fas fa-sort-down pb-2"></i>Descendant</a>
           </div>
         </div>
-        <button
-        type="button"
-        class="btn btn-info btn-sm col-md-4"
-        style="justify-self: end;"
-        (click)="open(classic, '', '')"
-      >
-        <span class="btn-inner--icon"
-          ><i class="fas fa-filter" style="padding-right: 3px"></i></span
-        ><span class="btn-inner--text">Filter</span>
-      </button>
+
 
         <button
           type="button"
@@ -173,6 +164,7 @@
           type="button"
           class="btn btn-primary btn-sm mb-2"
           style="justify-self: end"
+          (click)="downloadFile(this.Products)"
         >
           <span class="btn-inner--icon"
             > <lord-icon
@@ -186,10 +178,10 @@
           ><span class="btn-inner--text">Export CSV</span>
         </button>
         <button
-        type="file"
+        type="button"
         class="btn btn-primary btn-sm mb-2"
         style="justify-self: end"
-
+        (click)="fileInput.click()"
       >
 
         <span class="btn-inner--icon">
@@ -202,8 +194,10 @@
           style="width: 25px; height: 25px;padding-bottom:3px"
         ></lord-icon></span
         ><span class="btn-inner--text">Import CSV</span>
+        <input #fileInput type="file" (change)="fileChangeListener($event)" style="display:none;" />
       </button>
-      <input type="file"  (change)="fileChangeListener($event)">
+
+
     </div>
       <nav aria-label="..." class="col-3">
         <nav
