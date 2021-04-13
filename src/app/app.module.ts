@@ -40,7 +40,8 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     MatInputModule,
     ReactiveFormsModule,
     LottieAnimationViewModule.forRoot(),
-    NgxCsvParserModule
+    NgxCsvParserModule,
+
   ],
   declarations: [
     AppComponent,
