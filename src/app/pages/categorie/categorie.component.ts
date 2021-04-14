@@ -6,8 +6,12 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./categorie.component.css'],
 })
 export class CategorieComponent implements OnInit {
-
+  catimg = 'picture.svg';
+  editcatimg = '';
   closeResult: string;
+  editCategory: any = null;
+  deleteCategory: any = null;
+  inspectCategory: any = null;
   Categories = [
     {
       id: '18328290',
@@ -65,6 +69,16 @@ export class CategorieComponent implements OnInit {
     this.Categories = this.Categories.sort((a, b) => (a.name < b.name) ? 1 : -1);
   }
 
+  processFile(imageInput: any) {
+
+    this.catimg = imageInput.target.files[0].name;
+
+  }
+  processFile2(imageInput: any) {
+
+    this.editcatimg = imageInput.target.files[0].name;
+
+  }
 
   open(content, type, modalDimension) {
     if ( type !== 'Notification') {

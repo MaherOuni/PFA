@@ -18,3 +18,8 @@
 td{
   font-family: 'Epilogue', sans-serif;
 }
+.productimg{
+  height: 100px;
+  width: 100px;
+  object-fit: fill;
+}
