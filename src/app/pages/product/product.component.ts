@@ -10,11 +10,13 @@ import { saveAs } from 'file-saver';
   styleUrls: ["./product.component.css"],
 })
 export class ProductComponent implements OnInit {
-
-
+  mod=0;
+  pages=0;
+  page=0;
+  staticProducts : any
   csvRecords: any[] = [];
   header = true;
-
+  search= "";
   closeResult: string;
   prodimg="picture.svg"
   editprodimg=""
@@ -108,7 +110,10 @@ export class ProductComponent implements OnInit {
     "dépôt 1","dépôt 2","dépôt 3","dépôt 4","dépôt 5",
   ]
   ngOnInit(): void {
-    console.log(this.Products)
+    this.staticProducts = this.Products;
+    this.Products.length % 5? this.mod = 1 : this.mod = 0;
+    this.pages = (Math.floor(this.Products.length / 5)) + this.mod;
+
   }
 
 
@@ -152,7 +157,7 @@ filterNameDesc(){
 
   // Your applications input change listener for the CSV File
   fileChangeListener($event: any): void {
-
+    console.log("ok")
     // Select the files from the event
     const files = $event.srcElement.files;
 
@@ -165,6 +170,10 @@ filterNameDesc(){
         result.forEach(p => {
           this.Products.push(p);
         })
+        this.staticProducts = this.Products;
+        this.Products.length % 5? this.mod = 1 : this.mod = 0;
+        this.pages = (Math.floor(this.Products.length / 5)) + this.mod;
+        console.log(this.pages)
       }, (error: NgxCSVParserError) => {
         console.log('Error', error);
       });
@@ -181,5 +190,30 @@ filterNameDesc(){
 
     var blob = new Blob([csvArray], {type: 'text/csv' })
     saveAs(blob, "myFile.csv");
+}
+
+applySearch(){
+this.Products = this.staticProducts;
+ this.Products = this.Products.filter((p) => {
+    return p.name.includes(this.search) || p.ref.includes(this.search);
+  })
+}
+
+productDelete(){
+this.staticProducts =  this.staticProducts.filter((p)=>{
+   return   p.ref != this.deleteProduct.ref
+  });
+  this.Products =  this.Products.filter((p)=>{
+    return   p.ref != this.deleteProduct.ref
+   });
+}
+
+pagingForward(){
+  if(this.page + 1 < this.pages)
+  this.page+=1;
+}
+pagingBackward(){
+if(this.page >= 1)
+  this.page-=1;
 }
 }
