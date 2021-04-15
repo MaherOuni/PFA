@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,OnDestroy} from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild } from '@angular/core';
 import { NgxCsvParser } from 'ngx-csv-parser';
@@ -11,6 +11,19 @@ import { saveAs } from 'file-saver';
 })
 export class ProductComponent implements OnInit {
   constructor(private modalService: NgbModal, private ngxCsvParser: NgxCsvParser) {}
+  editingProduct:any;
+  newProduct = {
+    ref: '',
+    name: '',
+    img: '',
+    details: '',
+    price: 0,
+    category: 'Electronique',
+    supplier: '',
+    deposit: 'dépot 1',
+    qtestock: 0,
+    qtesold: 0,
+  }
   mod = 0;
   pages = 0;
   page = 0;
@@ -138,11 +151,13 @@ export class ProductComponent implements OnInit {
 processFile(imageInput: any) {
 
   this.prodimg = imageInput.target.files[0].name;
+  this.newProduct.img = this.prodimg;
 
 }
 processFile2(imageInput: any) {
 
   this.editprodimg = imageInput.target.files[0].name;
+  this.editingProduct.img = this.editprodimg;
 
 }
 filterNameAsc() {
@@ -194,7 +209,7 @@ filterNameDesc() {
 applySearch() {
 this.Products = this.staticProducts;
  this.Products = this.Products.filter((p) => {
-    return p.name.includes(this.search) || p.ref.includes(this.search);
+    return p.name.toUpperCase().includes(this.search.toUpperCase()) || p.ref.toUpperCase().includes(this.search.toUpperCase());
   });
 }
 
@@ -216,5 +231,33 @@ pagingBackward() {
 if (this.page >= 1) {
   this.page -= 1;
 }
+}
+saveedit(){
+  console.log(this.editingProduct);
+  this.editProduct = this.editingProduct;
+}
+savenew(){
+  let prod = {
+    ref: '',
+    name: '',
+    img: '',
+    details: '',
+    price: 0,
+    category: 'Electronique',
+    supplier: '',
+    deposit: 'dépot 1',
+    qtestock: 0,
+    qtesold: 0,
+  }
+  prod.name = this.newProduct.name
+  prod.ref = this.newProduct.ref
+  prod.img = this.newProduct.img
+  prod.price = this.newProduct.price
+  prod.category = this.newProduct.category
+  prod.deposit = this.newProduct.deposit
+  prod.qtestock = this.newProduct.qtestock
+this.Products.push(prod);
+this.Products.length % 5 ? this.mod = 1 : this.mod = 0;
+this.pages = (Math.floor(this.Products.length / 5)) + this.mod;
 }
 }

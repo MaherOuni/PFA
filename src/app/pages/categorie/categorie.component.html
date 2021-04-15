@@ -5,15 +5,17 @@
       <h3 class="col-md-3">Categories</h3>
       <div class="col-md-6 row">
         <input
-          placeholder="Search"
+          placeholder="Chercher une catégorie par nom ou reference"
           type="text"
           class="form-control-alternative text-center form-control col-md-11"
           style="margin-right: 5px; max-height: 30px"
+          (change)="search = $event.target.value"
         />
         <button
           type="button"
           class="btn-icon btn-round btn-2 btn btn-info btn-sm"
           style="border-radius: 16px; height: fit-content"
+          (click)="applySearch()"
         >
           <i class="fas fa-search"></i>
         </button>
@@ -61,7 +63,7 @@
             </tr>
           </thead>
           <tbody class="">
-            <tr *ngFor="let Category of Categories">
+            <tr *ngFor="let Category of Categories | slice: 0 + page * 5:6 + page * 5  ">
               <th scope="row">
                 {{ Category.id }}
               </th>
@@ -103,33 +105,33 @@
     <div class="py-4 card-footer">
       <nav aria-label="...">
         <nav
-          class="pagination justify-content-end mb-0"
-          aria-label="pagination"
-        >
-          <ul class="justify-content-end mb-0 pagination">
-            <li class="disabled page-item">
-              <a href="#pablo" tabindex="-1" class="page-link"
-                ><i class="fas fa-angle-left"></i
-                ><span class="sr-only">Previous</span></a
-              >
-            </li>
-            <li class="active page-item">
-              <a href="#pablo" class="page-link">1</a>
-            </li>
-            <li class="page-item">
-              <a href="#pablo" class="page-link"
-                >2 <span class="sr-only">(current)</span></a
-              >
-            </li>
-            <li class="page-item"><a href="#pablo" class="page-link">3</a></li>
-            <li class="page-item">
-              <a href="#pablo" class="page-link"
-                ><i class="fas fa-angle-right"></i
-                ><span class="sr-only">Next</span></a
-              >
-            </li>
-          </ul>
-        </nav>
+        class="pagination justify-content-end mb-0"
+        aria-label="pagination"
+      >
+        <ul class="justify-content-end mb-0 pagination">
+          <li class=" page-item" (click)="pagingBackward()">
+            <a  tabindex="-1" class="page-link"
+              ><i class="fas fa-angle-left"></i
+              ><span class="sr-only">Previous</span></a
+            >
+          </li>
+          <li class="active page-item">
+            <a  class="page-link">{{page + 1}}</a>
+          </li>
+          <li *ngIf="page + 2 <= pages" class="page-item disabled">
+            <a  class="page-link"
+              >{{page + 2}} <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li *ngIf="page + 3 <= pages"  class="page-item disabled"><a  class="page-link">{{page + 3}}</a></li>
+          <li class="page-item" (click)="pagingForward()">
+            <a  class="page-link"
+              ><i class="fas fa-angle-right"></i
+              ><span class="sr-only">Next</span></a
+            >
+          </li>
+        </ul>
+      </nav>
       </nav>
     </div>
   </div>
@@ -235,7 +237,7 @@
         <input
           placeholder="numero de reference"
           type="number"
-          [value]="editCategory.ref"
+          [value]="editCategory.id"
           class="form-control-alternative text-center form-control col-md-12"
           style="margin-bottom: 12px"
         />
@@ -275,19 +277,19 @@
       <div class="py-3 text-center">
         <i style="color: whitesmoke;" class="ni ni-bell-55 ni-3x"></i>
         <h4 class="heading mt-4" style="color: whitesmoke;">êtes-vous sûr de vouloir supprimer ce produit!</h4>
-        <p style="color: whitesmoke;">{{deleteProduct.ref}} {{deleteProduct.name}}.</p>
+        <p style="color: whitesmoke;">{{deleteCategory.id}} {{deleteCategory.name}}.</p>
       </div>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-link text-white " data-dismiss="modal" (click)="c('Close click')">Annuler</button>
-      <button type="button" class="btn btn-white ml-auto" data-dismiss="modal" (click)="productDelete();c('Close click')">Supprimer</button>
+      <button type="button" class="btn btn-white ml-auto" data-dismiss="modal" (click)="categoryDelete();c('Close click')">Supprimer</button>
     </div>
   </div>
 </ng-template>
 <ng-template #inspect let-c="close" let-d="dismiss">
   <div class="modal-content">
     <div class="modal-header">
-      <h6 class="modal-title" id="modal-title-default">{{inspectProduct.ref}}</h6>
+      <h6 class="modal-title" id="modal-title-default">{{inspectCategory.id}}</h6>
       <button
         type="button"
         class="close"
@@ -301,50 +303,20 @@
     <div class="modal-body col">
 
         <div class="m-auto" style="width: fit-content;margin-bottom:50px !important">
-        <img src="../../../assets/img/products/{{inspectProduct.img}}" class="inspectImg" alt="">
+        <img src="../../../assets/img/icons/common/{{inspectCategory.img}}" class="inspectImg" alt="">
 
 
       </div>
       <div class="row col-12">
+        <div class="row col-12">
+          <h3   class="col-10 headers">ID:</h3>
+          <h5 class="m-auto col-2 headers" >{{inspectCategory.id}}</h5>
+        </div>
       <div class="row col-12">
       <h3   class="col-10 headers">Nom du produit:</h3>
-      <h5 class="m-auto col-2 headers" >{{inspectProduct.name}}</h5>
+      <h5 class="m-auto col-2 headers" >{{inspectCategory.name}}</h5>
     </div>
-    <div class="row col-12">
-      <h3   class="col-10 headers">Prix:</h3>
-      <h5 class="m-auto col-2 headers" >{{inspectProduct.price}}TND</h5>
-    </div>
-    <div class="row col-12 ">
-      <h3   class="col-10 headers">Categorie:</h3>
-      <h5 class="m-auto col-2 headers" >{{inspectProduct.category}}</h5>
-    </div>
-    <div class="row col-12">
-      <h3   class="col-10 headers">Fournisseur:</h3>
-      <h5 class="m-auto col-2 headers" >{{inspectProduct.supplier}}</h5>
-    </div>
-    <div class="row col-12">
-      <h3   class="col-10 headers">Dépôt:</h3>
-      <h5 class="m-auto col-2 headers" >{{inspectProduct.deposit}}</h5>
-      </div>
-      <div class="row col-12">
-        <h3    class="col-10 headers">Quantité vendue:</h3>
-        <h5 class="m-auto col-2 headers" >{{inspectProduct.qtesold}}</h5>
-      </div>
-      <div class="row col-12">
-        <h3   class="col-10 headers">Quantité en stock:</h3>
-        <h5 class="m-auto col-2 headers" >{{inspectProduct.qtestock}}</h5>
-      </div>
-      <div class="row col-12">
-        <h3   class="col-10 headers">Détails:</h3>
-        <h5 class="m-auto col-2 headers" >{{inspectProduct.details}}</h5>
-      </div>
-      <div class="row col-12">
-        <h3   class="col-10 headers">Description:</h3>
-
-      </div>
-      <h5 class="m-auto col-11 " style="text-align: justify;
-  text-justify:auto;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis sunt labore error suscipit molestias quos nostrum incidunt enim dolor placeat dolorem mollitia, voluptates ipsam reiciendis sequi cum eveniet rem distinctio.</h5>
-    </div>
+   </div>
 
 
     </div>

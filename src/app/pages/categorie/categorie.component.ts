@@ -6,6 +6,11 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./categorie.component.css'],
 })
 export class CategorieComponent implements OnInit {
+  pages = 0;
+  page = 0;
+  mod = 0;
+  search = '';
+  staticCategories:any;
   catimg = 'picture.svg';
   editcatimg = '';
   closeResult: string;
@@ -57,7 +62,11 @@ export class CategorieComponent implements OnInit {
   ];
   constructor(private modalService: NgbModal) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.staticCategories = this.Categories;
+    this.Categories.length % 5 ? this.mod = 1 : this.mod = 0;
+    this.pages = (Math.floor(this.Categories.length / 5)) + this.mod;
+  }
 
 
   filterNameAsc() {
@@ -95,4 +104,28 @@ export class CategorieComponent implements OnInit {
     }
 
 }
+applySearch() {
+  this.Categories = this.staticCategories;
+   this.Categories = this.Categories.filter((p) => {
+      return p.name.toUpperCase().includes(this.search.toUpperCase()) || p.id.toUpperCase().includes(this.search.toUpperCase());
+    });
+  }
+  categoryDelete() {
+    this.staticCategories =  this.staticCategories.filter((p) => {
+       return   p.id != this.deleteCategory.id;
+      });
+      this.Categories =  this.Categories.filter((p) => {
+        return   p.id != this.deleteCategory.id;
+       });
+    }
+    pagingForward() {
+      if (this.page + 1 < this.pages) {
+      this.page += 1;
+      }
+    }
+    pagingBackward() {
+    if (this.page >= 1) {
+      this.page -= 1;
+    }
+    }
 }
