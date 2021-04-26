@@ -6,9 +6,15 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./categorie.component.css'],
 })
 export class CategorieComponent implements OnInit {
+  index;
   pages = 0;
   page = 0;
   mod = 0;
+  newCategory = {
+    id: '',
+    name: '',
+    img: '',
+  }
   search = '';
   staticCategories:any;
   catimg = 'picture.svg';
@@ -17,6 +23,7 @@ export class CategorieComponent implements OnInit {
   editCategory: any = null;
   deleteCategory: any = null;
   inspectCategory: any = null;
+  editingCategory:any;
   Categories = [
     {
       id: '18328290',
@@ -81,12 +88,13 @@ export class CategorieComponent implements OnInit {
   processFile(imageInput: any) {
 
     this.catimg = imageInput.target.files[0].name;
+    this.newCategory.img = this.catimg;
 
   }
   processFile2(imageInput: any) {
 
     this.editcatimg = imageInput.target.files[0].name;
-
+    this.editingCategory.img = this.editcatimg;
   }
 
   open(content, type, modalDimension) {
@@ -118,6 +126,10 @@ applySearch() {
         return   p.id != this.deleteCategory.id;
        });
     }
+    saveedit(){
+      this.Categories[this.index] = this.editingCategory;
+      console.log(this.editingCategory);
+    }
     pagingForward() {
       if (this.page + 1 < this.pages) {
       this.page += 1;
@@ -127,5 +139,18 @@ applySearch() {
     if (this.page >= 1) {
       this.page -= 1;
     }
+    }
+    savenew(){
+      let cat = {
+        id: '',
+        name: '',
+        img: '',
+      }
+      cat.name = this.newCategory.name
+      cat.id = this.newCategory.id
+      cat.img = this.newCategory.img
+    this.Categories.push(cat);
+    this.Categories.length % 5 ? this.mod = 1 : this.mod = 0;
+    this.pages = (Math.floor(this.Categories.length / 5)) + this.mod;
     }
 }

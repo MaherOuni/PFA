@@ -63,7 +63,7 @@
             </tr>
           </thead>
           <tbody class="">
-            <tr *ngFor="let Category of Categories | slice: 0 + page * 5:6 + page * 5  ">
+            <tr *ngFor="let Category of Categories | slice: 0 + page * 5:5 + page * 5;index as i  ">
               <th scope="row">
                 {{ Category.id }}
               </th>
@@ -92,7 +92,7 @@
                     class="dropdown-menu-right dropdown-menu-arrow"
                   >
                     <a class="dropdown-item" (click)="open(inspect, '', '');inspectCategory = Category;">Inspecter</a>
-                    <a class="dropdown-item" (click)="open(edit, '', '');editCategory = Category;editcatimg=editCategory.img">Modifier</a>
+                    <a class="dropdown-item" (click)="open(edit, '', '');editCategory = Category;editcatimg=editCategory.img;editingCategory = editCategory;index=i">Modifier</a>
                     <a class="dropdown-item" (click)="open(delete, '', '');deleteCategory = Category;">Supprimer</a>
                   </div>
                 </div>
@@ -185,13 +185,15 @@
           type="number"
           class="form-control-alternative text-center form-control col-md-12"
           style="margin-bottom: 12px"
+          (change)="newCategory.id = $event.target.value"
         />
         <h3>Nom du catégorie:</h3>
         <input
-          placeholder="Nom du produit"
+          placeholder="Nom du catégorie"
           type="text"
           class="form-control-alternative text-center form-control col-md-12"
           style="margin-bottom: 12px"
+          (change)="newCategory.name = $event.target.value"
         />
       </form>
     </div>
@@ -204,7 +206,7 @@
       >
         Annuler
       </button>
-      <button type="button" class="btn btn-primary ml-auto">Enregistrer</button>
+      <button type="button" class="btn btn-primary ml-auto" (click)="savenew();c('Close click')">Enregistrer</button>
     </div>
   </div>
 </ng-template>
@@ -240,6 +242,8 @@
           [value]="editCategory.id"
           class="form-control-alternative text-center form-control col-md-12"
           style="margin-bottom: 12px"
+          (change)="editingCategory.id = $event.target.value"
+
         />
       <h3>Nom de la catégorie</h3>
       <input
@@ -248,6 +252,8 @@
         [value]="editCategory.name"
         class="form-control-alternative text-center form-control col-md-12"
         style="margin-bottom: 12px"
+        (change)="editingCategory.name = $event.target.value"
+
       />
 
     </form>
@@ -261,7 +267,7 @@
       >
         Annuler
       </button>
-      <button type="button" class="btn btn-primary ml-auto">Enregistrer</button>
+      <button type="button" class="btn btn-primary ml-auto" (click)="saveedit();c('Close click')">Enregistrer</button>
     </div>
   </div>
 </ng-template>
@@ -313,7 +319,7 @@
           <h5 class="m-auto col-2 headers" >{{inspectCategory.id}}</h5>
         </div>
       <div class="row col-12">
-      <h3   class="col-10 headers">Nom du produit:</h3>
+      <h3   class="col-10 headers">Nom du catégorie:</h3>
       <h5 class="m-auto col-2 headers" >{{inspectCategory.name}}</h5>
     </div>
    </div>

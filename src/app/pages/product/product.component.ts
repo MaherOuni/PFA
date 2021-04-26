@@ -233,7 +233,6 @@ if (this.page >= 1) {
 }
 }
 saveedit(){
-  console.log(this.editingProduct);
   this.editProduct = this.editingProduct;
 }
 savenew(){

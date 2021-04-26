@@ -209,7 +209,7 @@ export class PosComponent implements OnInit {
 
   public downloadPDF() {
 
-    return xepOnline.Formatter.Format('content', { render: 'download',pageWidth:'5in',mimeType:'application/csv',filename:'recu n°1' });
+    return xepOnline.Formatter.Format('content', { render: 'print',pageWidth:'5in',mimeType:'application/pdf',filename:'recu n°1' });
   }
 
 }
