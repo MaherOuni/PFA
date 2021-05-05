@@ -125,3 +125,7 @@ input {
   font-weight: 500;
   color: rgb(48, 48, 48);
 }
+.container-fluid{
+  position: relative;
+  top:-10vh;
+}

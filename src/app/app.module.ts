@@ -25,6 +25,7 @@ import {MatInputModule} from '@angular/material/input';
 import { ReactiveFormsModule} from '@angular/forms';
 import { LottieAnimationViewModule } from 'ng-lottie';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
+import { StuffComponent } from './pages/stuff/stuff.component';
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     ProviderComponent,
     DepositComponent,
     SaleComponent,
+    StuffComponent,
 
   ],
   providers: [],

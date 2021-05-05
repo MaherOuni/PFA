@@ -12,6 +12,7 @@ import { ClientComponent } from '../../pages/client/client.component';
 import { ProviderComponent } from '../../pages/provider/provider.component';
 import { DepositComponent } from '../../pages/deposit/deposit.component';
 import { SaleComponent } from '../../pages/sale/sale.component';
+import { StuffComponent } from '../../pages/stuff/stuff.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'pos',      component: PosComponent },
@@ -21,6 +22,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'provider',      component: ProviderComponent },
     { path: 'deposit',      component: DepositComponent },
     { path: 'sale',      component: SaleComponent },
+    { path: 'stuff',      component: StuffComponent },
     { path: 'dashboard',      component: DashboardComponent },
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'tables',         component: TablesComponent },

@@ -1,1 +1,410 @@
-<p>deposit works!</p>
+<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8"></div>
+<div class="container-fluid">
+  <div class="card maincard">
+    <div class="card-head">
+      <h3 class="col-md-3">Dépôts</h3>
+      <div class="col-md-6 row">
+        <input
+          placeholder="Chercher un dépôt par nom et prénom"
+          type="text"
+          class="form-control-alternative text-center form-control col-md-11"
+          style="margin-right: 5px; max-height: 30px"
+          (change)="search = $event.target.value"
+        />
+        <button
+          type="button"
+          class="btn-icon btn-round btn-2 btn btn-info btn-sm"
+          style="border-radius: 16px; height: fit-content"
+          (click)="applySearch()"
+        >
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+      <div class="col-md-3" style="text-align: end">
+        <div class="col-md-3" style="display: contents" ngbDropdown>
+          <a class="btn btn-info btn-sm" ngbDropdownToggle>
+            <span class="btn-inner--icon"
+              ><i
+                class="ni ni-align-center"
+                style="padding-right: 6px"
+              ></i></span
+            ><span class="btn-inner--text">Sort</span>
+          </a>
+          <div ngbDropdownMenu class="dropdown-menu-right dropdown-menu-arrow">
+            <a class="dropdown-item" (click)="filterNameAsc()"
+              ><i class="fas fa-sort-up"></i>Ascendant</a
+            >
+            <a class="dropdown-item" (click)="filterNameDesc()">
+              <i class="fas fa-sort-down pb-2"></i>Descendant</a
+            >
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-info btn-sm col-md-4"
+          style="justify-self: end"
+          (click)="open(classic, '', '')"
+        >
+          <span class="btn-inner--icon"
+            ><i class="ni ni-fat-add" style="padding-right: 3px"></i></span
+          ><span class="btn-inner--text">Ajouter</span>
+        </button>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table align-items-center table-flush">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Nom</th>
+              <th scope="col">Capacité</th>
+              <th scope="col">Capacité utilisé</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody class="">
+            <tr *ngFor="let Deposit of Deposits | slice: 0 + page * 6:6 + page * 6;index as i  ">
+              <th scope="row">
+                {{ Deposit.name }}
+              </th>
+              <td>{{ Deposit.capacity}} mètre</td>
+              <td>
+                {{ Deposit.used }} mètre
+              </td>
+              <td class="text-right">
+                <div ngbDropdown placement="bottom-right">
+                  <a
+                    class="btn btn-sm btn-icon-only text-light"
+                    ngbDropdownToggle
+                  >
+                    <i class="fas fa-ellipsis-v"></i>
+                  </a>
+                  <div
+                    ngbDropdownMenu
+                    class="dropdown-menu-right dropdown-menu-arrow"
+                  >
+                    <a class="dropdown-item" (click)="open2(inspect, '', '');inspectDeposit = Deposit;">Inspecter</a>
+                    <a class="dropdown-item" (click)="open(edit, '', '');editDeposit = Deposit;editingDeposit = editDeposit;index=i">Modifier</a>
+                    <a class="dropdown-item" (click)="open(delete, '', '');deleteDeposit = Deposit;">Supprimer</a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="py-4 card-footer">
+      <nav aria-label="...">
+        <nav
+        class="pagination justify-content-end mb-0"
+        aria-label="pagination"
+      >
+        <ul class="justify-content-end mb-0 pagination">
+          <li class=" page-item" (click)="pagingBackward()">
+            <a  tabindex="-1" class="page-link"
+              ><i class="fas fa-angle-left"></i
+              ><span class="sr-only">Previous</span></a
+            >
+          </li>
+          <li class="active page-item">
+            <a  class="page-link">{{page + 1}}</a>
+          </li>
+          <li *ngIf="page + 2 <= pages" class="page-item disabled">
+            <a  class="page-link"
+              >{{page + 2}} <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li *ngIf="page + 3 <= pages"  class="page-item disabled"><a  class="page-link">{{page + 3}}</a></li>
+          <li class="page-item" (click)="pagingForward()">
+            <a  class="page-link"
+              ><i class="fas fa-angle-right"></i
+              ><span class="sr-only">Next</span></a
+            >
+          </li>
+        </ul>
+      </nav>
+      </nav>
+    </div>
+  </div>
+</div>
+<ng-template #classic let-c="close" let-d="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-title-default">Ajouter un dépôt</h6>
+      <button
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="d('Cross click')"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body col">
+      <form>
+        <h3>Nom:</h3>
+        <input
+          placeholder="nom du dépôt"
+          type="text"
+          class="form-control-alternative text-center form-control col-md-12"
+          style="margin-bottom: 12px"
+          (change)="newDeposit.name = $event.target.value"
+        />
+
+        <h3>Capacité:</h3>
+        <input
+          placeholder="capacité du dépôt"
+          type="number"
+          class="form-control-alternative text-center form-control col-md-12"
+          style="margin-bottom: 12px"
+          (change)="newDeposit.capacity = $event.target.value"
+        />
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-link"
+        data-dismiss="modal"
+        (click)="c('Close click')"
+      >
+        Annuler
+      </button>
+      <button type="button" class="btn btn-primary ml-auto" (click)="savenew();c('Close click')">Enregistrer</button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #edit let-c="close" let-d="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-title-default">Modifier le dépôt</h6>
+      <button
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="d('Cross click')"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body col">
+      <form>
+
+      <h3>Nom</h3>
+      <input
+        placeholder="nom du dépôt"
+        type="text"
+        [value]="editDeposit.name"
+        class="form-control-alternative text-center form-control col-md-12"
+        style="margin-bottom: 12px"
+        (change)="editingDeposit.name = $event.target.value"
+
+      />
+      <h3>Capacité</h3>
+      <input
+        placeholder="numéro du dépôt"
+        type="number"
+        [value]="editDeposit.capacity"
+        class="form-control-alternative text-center form-control col-md-12"
+        style="margin-bottom: 12px"
+        (change)="editingDeposit.capacity = $event.target.value"
+
+      />
+      <h3>Capacité utilisé</h3>
+      <input
+        placeholder="numéro du dépôt"
+        type="number"
+        [value]="editDeposit.used"
+        class="form-control-alternative text-center form-control col-md-12"
+        style="margin-bottom: 12px"
+        (change)="editingDeposit.used = $event.target.value"
+
+      />
+    </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-link"
+        data-dismiss="modal"
+        (click)="c('Close click')"
+      >
+        Annuler
+      </button>
+      <button type="button" class="btn btn-primary ml-auto" (click)="saveedit();c('Close click')">Enregistrer</button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #delete let-c="close" let-d="dismiss">
+  <div class="modal-content bg-gradient-danger">
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-title-notification" style="color:whitesmoke">Faite attention</h6>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="d('Cross click')">
+        <span style="color:whitesmoke" aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="py-3 text-center">
+        <i style="color: whitesmoke;" class="ni ni-bell-55 ni-3x"></i>
+        <h4 class="heading mt-4" style="color: whitesmoke;">êtes-vous sûr de vouloir supprimer ce dépôt!</h4>
+        <p style="color: whitesmoke;">{{deleteDeposit.name}} .</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-link text-white " data-dismiss="modal" (click)="c('Close click')">Annuler</button>
+      <button type="button" class="btn btn-white ml-auto" data-dismiss="modal" (click)="DepositDelete();c('Close click')">Supprimer</button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #inspect let-c="close" let-d="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-title-default">{{inspectDeposit.id}}</h6>
+      <button
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="d('Cross click')"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body col">
+      <div class="row col-12">
+        <div class="row col-12">
+          <h3   class="col-3 headers">Nom:</h3>
+          <h5 class="m-auto col-3 headers" >{{inspectDeposit.name}}</h5>
+          <h3   class="col-2 headers">capacité:</h3>
+          <h5 class="m-auto col-4 headers" >{{inspectDeposit.capacity}}</h5>
+        </div>
+        <div class="row col-12">
+          <h3   class="col-3 headers">capacité utilisé:</h3>
+          <h5 class="m-auto col-3 headers" >{{inspectDeposit.used}} </h5>
+        </div>
+   </div>
+   <h2   class="col-3 headers">Produits:</h2>
+   <div class="table-responsive m-top" style="height: 230px">
+    <table class="table align-items-center table-flush">
+      <thead class="thead-light">
+        <tr class="paddingl-11">
+          <th scope="col">Produit</th>
+          <th scope="col">Reference</th>
+          <th scope="col">Prix</th>
+          <th scope="col">Fournisseur</th>
+          <th scope="col">Quantité</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let Product of Products">
+          <th scope="row">
+            <div class="media align-items-center">
+              <a href="#" class="mr-3">
+                <img
+                  class="prodimg"
+                  alt="Image placeholder"
+                  src="../../../assets/img/products/{{ Product.img }}"
+                />
+              </a>
+              <div class="media-body">
+                <span class="mb-0 text-sm">{{ Product.name }}</span>
+              </div>
+            </div>
+          </th>
+          <td>{{ Product.ref }}</td>
+              <td style="color: #2dce89">{{ Product.price }} TND</td>
+              <td>{{ Product.supplier }}</td>
+              <td style="text-align: center">{{ Product.qtestock }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-link"
+        data-dismiss="modal"
+        (click)="c('Close click')"
+      >
+        Fermer
+      </button>
+
+    </div>
+  </div>
+</ng-template>
+<ng-template #facture let-c="close" let-d="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-title-default">Reçu</h6>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div id="content">
+        <p class="fact">Facture</p>
+        <p class="place">Quincaillerie Med Salah Elj</p>
+        <p class="place">Address: Menzel Jmil Rue Kathe 7070</p>
+        <p class="place">N° de facture : {{inspectSale.id}}</p>
+        <p class="typ">Date : {{inspectSale.date}}</p>
+        <p class="typ">dépôt: {{inspectDeposit.name}} </p>
+        <table class="table" cellspacing="0" border="0">
+          <thead>
+            <tr>
+              <th><em>#</em></th>
+              <th>Produit</th>
+              <th>Quantité</th>
+              <th>Sous Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let prod of prodligne; index as i">
+              <td style="text-align:center; width:30px;" class="typ">{{i+1}}</td>
+              <td style="text-align:left; width:180px;" class="typ">{{prod.name}}</td>
+              <td style="text-align:center; width:50px;" class="typ">{{prod.qte}}</td>
+              <td style="text-align:right; width:70px; " class="typ">{{prod.price}} TND</td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table" cellspacing="0" border="0">
+          <tbody>
+
+            <tr>
+              <td colspan="2" style="text-align:left; font-weight:bold; padding-top:5px;">Grand Total</td>
+              <td colspan="2"
+                style="border-top:1px dashed #000; padding-top:5px; text-align:right; font-weight:bold;">{{inspectSale.amount}}
+                TND.</td>
+            </tr>
+            <tr>
+              <td colspan="2" style="text-align:left; font-weight:bold; padding-top:5px;">Payé</td>
+              <td colspan="2" style="padding-top:5px; text-align:right; font-weight:bold;">{{inspectSale.payed}} TND.</td>
+            </tr>
+            <tr>
+              <td colspan="2" style="text-align:left; font-weight:bold; padding-top:5px;">Reste</td>
+              <td colspan="2" style="padding-top:5px; text-align:right; font-weight:bold;">{{inspectSale.amount - (inspectSale.amount * inspectSale.discount / 100) - inspectSale.payed}} TND.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="border-top:1px solid #000; padding-top:10px;"><span class="float-left typ">Med Salah
+            Elj</span><span class="float-right">Tel: +12345678</span>
+          <div style="clear:both;">
+            <p class="text-center" style="margin:0 auto;margin-top:10px;"></p>
+            <div class="text-center typ"
+              style="background-color:#fff;padding:5px;width:85%;color:#000;margin:0 auto;border-radius:3px;margin-top:20px;">
+              Merci d'avoir acheté</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+
+      <button type="button" class="btn btn-link " data-dismiss="modal" (click)="c('Close click')">Fermer</button>
+      <button type="button" class="btn btn-primary  ml-auto" (click)="downloadPDF()">Imprimer</button>
+    </div>
+  </div>
+</ng-template>

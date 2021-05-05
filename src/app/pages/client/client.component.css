@@ -18,3 +18,20 @@
 td{
   font-family: 'Epilogue', sans-serif;
 }
+#content .typ {
+  color: rgb(31, 31, 31);
+  font-size: 15px;
+  font-weight: 500;
+}
+#content .fact{
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: rgb(48, 48, 48);
+}
+#content .place{
+  text-align: center;
+  font-size: 20px;
+  font-weight: 500;
+  color: rgb(48, 48, 48);
+}

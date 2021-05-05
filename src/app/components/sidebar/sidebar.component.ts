@@ -16,7 +16,7 @@ export const ROUTES: RouteInfo[] = [
     { path: '/provider', title: 'Fournisseurs',  icon:'<lord-icon src="../../../assets/lottie/497-truck-delivery-outline-edited.json" trigger="hover" colors="primary:#464f4f,secondary:#f5365c" stroke="80" style="width:40px;height:40px"></lord-icon>', class: '' },
     { path: '/deposit', title: 'Dépôt',  icon:'<lord-icon src="../../../assets/lottie/63-home-outline-edited.json" trigger="hover" colors="primary:#2dce89,secondary:#464f4f" stroke="80" style="width:40px;height:40px"></lord-icon>',class: '' },
     { path: '/sale', title: 'Vents',  icon:'<lord-icon src="../../../assets/lottie/948-stock-share-outline-edited.json" trigger="hover" colors="primary:#121331,secondary:#5e72e4" stroke="80" style="width:40px;height:40px"></lord-icon>', class: '' },
-    { path: '/dashboard', title: 'Personnels',  icon:'<lord-icon src="../../../assets/lottie/680-it-developer-outline-edited.json" trigger="hover" colors="primary:#121331,secondary:#5e72e4" stroke="80" style="width:40px;height:40px"></lord-icon>', class: '' },
+    { path: '/stuff', title: 'Personnels',  icon:'<lord-icon src="../../../assets/lottie/680-it-developer-outline-edited.json" trigger="hover" colors="primary:#121331,secondary:#5e72e4" stroke="80" style="width:40px;height:40px"></lord-icon>', class: '' },
     { path: '/dashboard', title: 'Revenu',  icon:'<lord-icon src="../../../assets/lottie/153-bar-chart-growth-outline-edited.json" trigger="hover" colors="primary:#121331,secondary:#5e72e4" stroke="80" style="width:40px;height:40px"></lord-icon>', class: '' },
 ];
 

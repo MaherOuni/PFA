@@ -26,6 +26,7 @@ export class ClientComponent implements OnInit {
   editClient: any = null;
   deleteClient: any = null;
   inspectClient: any = null;
+  inspectSale:any=null;
   editingClient:any;
 
   Clients = [
