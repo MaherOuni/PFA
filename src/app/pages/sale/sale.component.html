@@ -39,16 +39,7 @@
             >
           </div>
         </div>
-        <button
-          type="button"
-          class="btn btn-info btn-sm col-md-4"
-          style="justify-self: end"
-          (click)="open(classic, '', '')"
-        >
-          <span class="btn-inner--icon"
-            ><i class="ni ni-fat-add" style="padding-right: 3px"></i></span
-          ><span class="btn-inner--text">Ajouter</span>
-        </button>
+
       </div>
     </div>
     <div class="card-body p-0">
@@ -129,77 +120,7 @@
     </div>
   </div>
 </div>
-<ng-template #classic let-c="close" let-d="dismiss">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h6 class="modal-title" id="modal-title-default">Ajouter un Sale</h6>
-      <button
-        type="button"
-        class="close"
-        data-dismiss="modal"
-        aria-label="Close"
-        (click)="d('Cross click')"
-      >
-        <span aria-hidden="true">×</span>
-      </button>
-    </div>
-    <div class="modal-body col">
-      <form>
-        <h3>Nom:</h3>
-        <input
-          placeholder="nom du Sale"
-          type="text"
-          class="form-control-alternative text-center form-control col-md-12"
-          style="margin-bottom: 12px"
-          (change)="newSale.lastname = $event.target.value"
-        />
-        <h3>Prénom:</h3>
-        <input
-          placeholder="prénom du Sale"
-          type="text"
-          class="form-control-alternative text-center form-control col-md-12"
-          style="margin-bottom: 12px"
-          (change)="newSale.firstname = $event.target.value"
-        />
-        <h3>Téléphone:</h3>
-        <input
-          placeholder="numéro de téléphone"
-          type="number"
-          class="form-control-alternative text-center form-control col-md-12"
-          style="margin-bottom: 12px"
-          (change)="newSale.phone = $event.target.value"
-        />
-        <h3>Email:</h3>
-        <input
-          placeholder="mail du Sale"
-          type="email"
-          class="form-control-alternative text-center form-control col-md-12"
-          style="margin-bottom: 12px"
-          (change)="newSale.email = $event.target.value"
-        />
-        <h3>Address:</h3>
-        <input
-          placeholder="address du Sale"
-          type="text"
-          class="form-control-alternative text-center form-control col-md-12"
-          style="margin-bottom: 12px"
-          (change)="newSale.adresse = $event.target.value"
-        />
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-link"
-        data-dismiss="modal"
-        (click)="c('Close click')"
-      >
-        Annuler
-      </button>
-      <button type="button" class="btn btn-primary ml-auto" (click)="savenew();c('Close click')">Enregistrer</button>
-    </div>
-  </div>
-</ng-template>
+
 <ng-template #edit let-c="close" let-d="dismiss">
   <div class="modal-content">
     <div class="modal-header">
