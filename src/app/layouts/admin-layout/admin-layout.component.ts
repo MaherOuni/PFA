@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
+import {AuthenticationService} from '../../authentication.service'
+import {Router} from '@angular/router'
 @Component({
   selector: 'app-admin-layout',
   templateUrl: './admin-layout.component.html',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminLayoutComponent implements OnInit {
 
-  constructor() { }
+  constructor(private auth: AuthenticationService,private router:Router) { }
 
   ngOnInit() {
+    this.auth.jwt = localStorage.getItem("jwt");
+    if(this.auth.jwt == undefined){
+        this.router.navigate(["/login"])
+    }
   }
 
 }

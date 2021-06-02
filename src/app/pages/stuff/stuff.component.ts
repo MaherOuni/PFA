@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { UsersService } from '../../users.service';
 @Component({
   selector: 'app-stuff',
   templateUrl: './stuff.component.html',
@@ -140,9 +141,14 @@ export class StuffComponent implements OnInit {
       qte: 3,
     },
   ];
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal,private users:UsersService) { }
 
   ngOnInit(): void {
+
+    this.users.getAllUsers().subscribe((response) => {
+      console.log(response)
+    });
+
     this.staticStuffs = this.Stuffs;
     this.Stuffs.length % 6 ? this.mod = 1 : this.mod = 0;
     this.pages = (Math.floor(this.Stuffs.length / 6)) + this.mod;
