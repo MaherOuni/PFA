@@ -36,6 +36,7 @@
 
             <div class="text-center">
               <button type="button" class="btn btn-primary my-4" (click)="authenticate()">S'authentifier</button>
+              <h5 style="color: #f5365c ;" *ngIf="error">{{this.error}}</h5>
             </div>
           </form>
         </div>
@@ -44,3 +45,4 @@
     </div>
   </div>
 </div>
+

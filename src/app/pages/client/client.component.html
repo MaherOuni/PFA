@@ -66,14 +66,14 @@
           <tbody class="">
             <tr *ngFor="let Client of Clients | slice: 0 + page * 6:6 + page * 6;index as i  ">
               <th scope="row">
-                {{ Client.firstname }} {{Client.lastname }}
+                {{ Client.firstName }} {{Client.lastName }}
               </th>
               <td>{{ Client.email }}</td>
               <td>
                 {{ Client.phone }}
               </td>
               <td>
-                {{ Client.adresse }}
+                {{ Client.address }}
               </td>
               <td class="text-right">
                 <div ngbDropdown placement="left">
@@ -154,7 +154,7 @@
           type="text"
           class="form-control-alternative text-center form-control col-md-12"
           style="margin-bottom: 12px"
-          (change)="newClient.lastname = $event.target.value"
+          (change)="newClient.lastName = $event.target.value"
         />
         <h3>Prénom:</h3>
         <input
@@ -162,7 +162,7 @@
           type="text"
           class="form-control-alternative text-center form-control col-md-12"
           style="margin-bottom: 12px"
-          (change)="newClient.firstname = $event.target.value"
+          (change)="newClient.firstName = $event.target.value"
         />
         <h3>Téléphone:</h3>
         <input
@@ -186,7 +186,7 @@
           type="text"
           class="form-control-alternative text-center form-control col-md-12"
           style="margin-bottom: 12px"
-          (change)="newClient.adresse = $event.target.value"
+          (change)="newClient.address = $event.target.value"
         />
       </form>
     </div>
@@ -223,20 +223,20 @@
         <input
           placeholder="nom du client"
           type="text"
-          [value]="editClient.lastname"
+          [value]="editClient.lastName"
           class="form-control-alternative text-center form-control col-md-12"
           style="margin-bottom: 12px"
-          (change)="editingClient.lastname = $event.target.value"
+          (change)="editingClient.lastName = $event.target.value"
 
         />
       <h3>Prénom</h3>
       <input
         placeholder="prénom du client"
         type="text"
-        [value]="editClient.firstname"
+        [value]="editClient.firstName"
         class="form-control-alternative text-center form-control col-md-12"
         style="margin-bottom: 12px"
-        (change)="editingClient.firstname = $event.target.value"
+        (change)="editingClient.firstName = $event.target.value"
 
       />
       <h3>Téléphone</h3>
@@ -263,10 +263,10 @@
       <input
         placeholder="address du client"
         type="text"
-        [value]="editClient.adresse"
+        [value]="editClient.address"
         class="form-control-alternative text-center form-control col-md-12"
         style="margin-bottom: 12px"
-        (change)="editingClient.adresse = $event.target.value"
+        (change)="editingClient.address = $event.target.value"
 
       />
 
@@ -297,7 +297,7 @@
       <div class="py-3 text-center">
         <i style="color: whitesmoke;" class="ni ni-bell-55 ni-3x"></i>
         <h4 class="heading mt-4" style="color: whitesmoke;">êtes-vous sûr de vouloir supprimer ce client!</h4>
-        <p style="color: whitesmoke;">{{deleteClient.firstname}} {{deleteClient.lastname}}.</p>
+        <p style="color: whitesmoke;">{{deleteClient.firstName}} {{deleteClient.lastName}}.</p>
       </div>
     </div>
     <div class="modal-footer">
@@ -324,7 +324,7 @@
       <div class="row col-12">
         <div class="row col-12">
           <h3   class="col-3 headers">Nom & prénom:</h3>
-          <h5 class="m-auto col-3 headers" >{{inspectClient.lastname}} {{inspectClient.firstname}}</h5>
+          <h5 class="m-auto col-3 headers" >{{inspectClient.lastName}} {{inspectClient.firstName}}</h5>
           <h3   class="col-2 headers">Téléphone:</h3>
           <h5 class="m-auto col-4 headers" >{{inspectClient.phone}}</h5>
         </div>
@@ -332,7 +332,7 @@
           <h3   class="col-3 headers">Email:</h3>
           <h5 class="m-auto col-3 headers" >{{inspectClient.email}} </h5>
           <h3   class="col-2 headers">Address:</h3>
-          <h5 class="m-auto col-4 headers" >{{inspectClient.adresse}}</h5>
+          <h5 class="m-auto col-4 headers" >{{inspectClient.address}}</h5>
         </div>
    </div>
    <h2   class="col-3 headers">Achats:</h2>
@@ -403,7 +403,7 @@
         <p class="place">Address: Menzel Jmil Rue Kathe 7070</p>
         <p class="place">N° de facture : {{inspectSale.id}}</p>
         <p class="typ">Date : {{inspectSale.date}}</p>
-        <p class="typ">Client : {{inspectClient.firstname}} {{inspectClient.lastname}}</p>
+        <p class="typ">Client : {{inspectClient.firstName}} {{inspectClient.lastName}}</p>
         <table class="table" cellspacing="0" border="0">
           <thead>
             <tr>

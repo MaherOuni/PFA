@@ -6,13 +6,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class AuthenticationService {
   header: HttpHeaders;
-  jwt=undefined;
-  constructor(public http : HttpClient) { }
-  authenticate(credentials)
-  {
-    let url = '/api/authenticate';
+  jwt = undefined;
+  constructor(public http: HttpClient) { }
+  authenticate(credentials) {
+
+    const url = '/api/authenticate';
     this.header = new HttpHeaders();
-    this.header.append("Content-Type", "application/json");
-    return this.http.post(url,credentials, {headers: this.header});
+    this.header.append('Content-Type', 'application/json');
+    return this.http.post(url, credentials, {headers: {skip:'true'}});
   }
 }

@@ -30,10 +30,11 @@
               </div>
             </form>
             <div class="col-md-12 categoriesDiv">
-              <span id="all" class="badge badge-pill badge-danger">Tous</span>
+              <span id="all" class="badge badge-pill badge-danger" (click)="Products = staticprods">Tous</span>
               <span
                 *ngFor="let categorie of Categories"
                 class="badge badge-pill badge-info"
+                (click)="filterProds(categorie)"
                 >{{ categorie }}</span
               >
             </div>
@@ -44,7 +45,7 @@
                   style="padding: 0"
                   class="col-md-3 col-xl-3"
                 >
-                  <div class="card prodcard">
+                  <div class="card prodcard" (click)="addprodligne(product)">
                     <img
                       class="card-img-top"
                       src="../../../assets/img/products/{{ product.img }}.jpg"
@@ -134,8 +135,8 @@
                   <th scope="col"></th>
                 </tr>
               </thead>
-              <tbody>
-                <tr *ngFor="let prod of prodligne">
+              <tbody *ngIf="prodligne.length != 0">
+                <tr *ngFor="let prod of prodligne;let i = index">
                   <th scope="row" class="paddingl-1">
                     {{ prod.name }}
                   </th>
@@ -146,6 +147,7 @@
                         class="btn btn-icon btn-2 btn-primary btn-sm col-md-4"
                         id="btn-add"
                         type="button"
+                        (click)="minusqte(i)"
                       >
 
                         <span class="btn-inner--icon"
@@ -156,6 +158,7 @@
                         class="btn btn-icon btn-2 btn-primary btn-sm col-md-4"
                         id="btn-add"
                         type="button"
+                        (click)="plusqte(i)"
                       >
                         <span class="btn-inner--icon"
                           ><i class="fas fa-plus awesome"></i></span>
@@ -168,6 +171,7 @@
                       class="btn btn-icon btn-2 btn-danger btn-sm"
                       id="btn-add"
                       type="button"
+                      (click)="prodligne.splice(i,1)"
                     >
                       <span class="btn-inner--icon"
                         ><lord-icon
@@ -296,7 +300,7 @@
             <tr>
               <td colspan="2" style="text-align:left; font-weight:bold; padding-top:5px;">Grand Total</td>
               <td colspan="2"
-                style="border-top:1px dashed #000; padding-top:5px; text-align:right; font-weight:bold;">200.0
+                style="border-top:1px dashed #000; padding-top:5px; text-align:right; font-weight:bold;">{{total}}
                 TND.</td>
             </tr>
             <tr>

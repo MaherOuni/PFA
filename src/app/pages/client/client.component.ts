@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-
+import { ClientsService} from '../../clients.service'
 declare var xepOnline: any;
 @Component({
   selector: 'app-client',
@@ -14,11 +14,11 @@ export class ClientComponent implements OnInit {
   mod = 0;
   newClient = {
     id: '',
-    firstname: '',
-    lastname:'',
+    firstName: '',
+    lastName:'',
     phone: 0,
     email:'',
-    adresse:''
+    address:''
   }
   search = '';
   staticClients:any;
@@ -28,59 +28,59 @@ export class ClientComponent implements OnInit {
   inspectClient: any = null;
   inspectSale:any=null;
   editingClient:any;
+  Clients:Array<any>
+  // Clients = [
+  //   {
+  //     id: '18328290',
+  //   firstName: 'Alison',
+  //   lastName:'Campbell',
+  //   phone: 98989898,
+  //   email:'alison_camp@gmail.com',
+  //   address:'3992  Willis Avenue, Orlando'
+  //   },
+  //   {
+  //     id: '22328290',
+  //   firstName: 'Nicholas',
+  //   lastName:'Bailey',
+  //   phone: 25252525,
+  //   email:'nicholas1980@yahoo.com',
+  //   address:'476  Kemper Lane, Chicago'
+  //   },
+  //   {
+  //     id: '88328291',
+  //   firstName: 'Thomas',
+  //   lastName:'Gray',
+  //   phone: 43434343,
+  //   email:'graythomas27@gmail.com',
+  //   address:'3216  Flynn Street, Solon'
+  //   },
+  //   {
+  //     id: '18328290',
+  //   firstName: 'Alison',
+  //   lastName:'Campbell',
+  //   phone: 98989898,
+  //   email:'alison_camp@gmail.com',
+  //   address:'3992  Willis Avenue, Orlando'
+  //   },
+  //   {
+  //     id: '22328290',
+  //   firstName: 'Nicholas',
+  //   lastName:'Bailey',
+  //   phone: 25252525,
+  //   email:'nicholas1980@yahoo.com',
+  //   address:'476  Kemper Lane, Chicago'
+  //   },
+  //   {
+  //     id: '88328291',
+  //   firstName: 'Thomas',
+  //   lastName:'Gray',
+  //   phone: 43434343,
+  //   email:'graythomas27@gmail.com',
+  //   address:'3216  Flynn Street, Solon'
+  //   },
 
-  Clients = [
-    {
-      id: '18328290',
-    firstname: 'Alison',
-    lastname:'Campbell',
-    phone: 98989898,
-    email:'alison_camp@gmail.com',
-    adresse:'3992  Willis Avenue, Orlando'
-    },
-    {
-      id: '22328290',
-    firstname: 'Nicholas',
-    lastname:'Bailey',
-    phone: 25252525,
-    email:'nicholas1980@yahoo.com',
-    adresse:'476  Kemper Lane, Chicago'
-    },
-    {
-      id: '88328291',
-    firstname: 'Thomas',
-    lastname:'Gray',
-    phone: 43434343,
-    email:'graythomas27@gmail.com',
-    adresse:'3216  Flynn Street, Solon'
-    },
-    {
-      id: '18328290',
-    firstname: 'Alison',
-    lastname:'Campbell',
-    phone: 98989898,
-    email:'alison_camp@gmail.com',
-    adresse:'3992  Willis Avenue, Orlando'
-    },
-    {
-      id: '22328290',
-    firstname: 'Nicholas',
-    lastname:'Bailey',
-    phone: 25252525,
-    email:'nicholas1980@yahoo.com',
-    adresse:'476  Kemper Lane, Chicago'
-    },
-    {
-      id: '88328291',
-    firstname: 'Thomas',
-    lastname:'Gray',
-    phone: 43434343,
-    email:'graythomas27@gmail.com',
-    adresse:'3216  Flynn Street, Solon'
-    },
 
-
-  ];
+  // ];
 
   Sales = [
     {
@@ -127,20 +127,26 @@ export class ClientComponent implements OnInit {
       qte: 3,
     },
   ];
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal,private clients :ClientsService) { }
 
   ngOnInit(): void {
-    this.staticClients = this.Clients;
+
+    this.clients.getAllClients().subscribe((response) => {
+      console.log(response);
+      this.Clients = Object.assign([], response);
+      this.staticClients = this.Clients;
     this.Clients.length % 6 ? this.mod = 1 : this.mod = 0;
     this.pages = (Math.floor(this.Clients.length / 6)) + this.mod;
+    });
+
   }
   filterNameAsc() {
 
-    this.Clients = this.Clients.sort((a, b) => (a.firstname > b.firstname) ? 1 : -1);
+    this.Clients = this.Clients.sort((a, b) => (a.firstName > b.firstName) ? 1 : -1);
   }
   filterNameDesc() {
 
-    this.Clients = this.Clients.sort((a, b) => (a.firstname < b.firstname) ? 1 : -1);
+    this.Clients = this.Clients.sort((a, b) => (a.firstName < b.firstName) ? 1 : -1);
   }
   open(content, type, modalDimension) {
     if ( type !== 'Notification') {
@@ -167,7 +173,7 @@ open2(content, type, modalDimension){
 applySearch() {
   this.Clients = this.staticClients;
    this.Clients = this.Clients.filter((p) => {
-      return p.firstname.toUpperCase().includes(this.search.toUpperCase()) || p.lastname.toUpperCase().includes(this.search.toUpperCase());
+      return p.firstName.toUpperCase().includes(this.search.toUpperCase()) || p.lastName.toUpperCase().includes(this.search.toUpperCase());
     });
   }
   pagingForward() {
@@ -194,17 +200,17 @@ applySearch() {
     savenew(){
       let cli = {
         id: '',
-        firstname: '',
-        lastname:'',
+        firstName: '',
+        lastName:'',
         phone: 0 ,
         email:'',
-        adresse:''
+        address:''
       }
-      cli.firstname = this.newClient.firstname
+      cli.firstName = this.newClient.firstName
       cli.id = this.newClient.id
-      cli.lastname = this.newClient.lastname
+      cli.lastName = this.newClient.lastName
       cli.phone = this.newClient.phone
-      cli.adresse = this.newClient.adresse
+      cli.address = this.newClient.address
       cli.email = this.newClient.email
 
     this.Clients.push(cli);

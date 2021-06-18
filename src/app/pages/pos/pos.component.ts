@@ -1,139 +1,169 @@
-import { Component, OnInit } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { Observable } from "rxjs";
-import { map, startWith } from "rxjs/operators";
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { cpuUsage } from 'process';
 declare var xepOnline: any;
 @Component({
-  selector: "app-pos",
-  templateUrl: "./pos.component.html",
-  styleUrls: ["./pos.component.css"],
+  selector: 'app-pos',
+  templateUrl: './pos.component.html',
+  styleUrls: ['./pos.component.css'],
 })
 export class PosComponent implements OnInit {
   total;
   closeResult: string;
   test: Date = new Date();
   Categories = [
-    "Electronique",
-    "Plomberie",
-    "Plâtererie",
-    "Peinture",
-    "Maconnerie",
-    "Mecanique",
-    "Domestique",
-    "Climatisation",
+    'Electronique',
+    'Plomberie',
+    'Plâtererie',
+    'Peinture',
+    'Maconnerie',
+    'Mecanique',
+    'Domestique',
+    'Climatisation',
   ];
   Products = [
     {
-      name: "Ciment",
-      img: "514ofwJ1JVL._AC_SY355_",
-      details: "50Kg",
-    },
-    {
-      name: "Clou",
-      img: "61tYal6UQ9L._AC_SL1360_",
-      details: "7cm",
-    },
-    {
-      name: "Fil barbelé",
-      img: "ae235",
-      details: "hauteur 1m",
-    },
-    {
-      name: "Clous de fil",
-      img: "wire-nails-500x500",
-      details: "5cm",
-    },
-    {
-      name: "Astral matt",
-      img: "dulux-flat-matt",
-      details: "5kg",
-    },
-    {
-      name: "Astral etanche",
-      img: "silo-MIN",
-      details: "5kg",
-    },
-    {
-      name: "Conduite d'eau ",
-      img: "stainless-steel-water-pipe-500x500",
-      details: "⌀200mm",
-    },
-    {
-      name: "Multicouche",
-      img: "Pex-Multilayer",
-      details: "⌀20mm",
-    },
-    {
-      name: "Ciment",
-      img: "514ofwJ1JVL._AC_SY355_",
-      details: "50Kg",
-    },
-    {
-      name: "Clou",
-      img: "61tYal6UQ9L._AC_SL1360_",
-      details: "7cm",
-    },
-    {
-      name: "Fil barbelé",
-      img: "ae235",
-      details: "hauteur 1m",
-    },
-    {
-      name: "Clous de fil",
-      img: "wire-nails-500x500",
-      details: "5cm",
-    },
-    {
-      name: "Astral matt",
-      img: "dulux-flat-matt",
-      details: "5kg",
-    },
-    {
-      name: "Astral etanche",
-      img: "silo-MIN",
-      details: "5kg",
-    },
-    {
-      name: "Conduite d'eau ",
-      img: "stainless-steel-water-pipe-500x500",
-      details: "⌀200mm",
-    },
-    {
-      name: "Multicouche",
-      img: "Pex-Multilayer",
-      details: "⌀20mm",
-    },
-  ];
-
-  prodligne: Array<any> = [
-    {
-      name: "Product 1",
+      name: 'Ciment',
+      img: '514ofwJ1JVL._AC_SY355_',
+      details: '50Kg',
+      categorie: 'Maconnerie',
       price: 2.5,
       qte: 1,
     },
     {
-      name: "Product 2",
-      price: 6.3,
-      qte: 2,
+      name: 'Clou',
+      img: '61tYal6UQ9L._AC_SL1360_',
+      details: '7cm',
+      price: 2.5,
+      qte: 1,
+      categorie: 'Maconnerie'
     },
     {
-      name: "Product 3",
-      price: 3.7,
-      qte: 5,
+      name: 'Fil barbelé',
+      img: 'ae235',
+      details: 'hauteur 1m',
+      price: 2.5,
+      qte: 1,
+      categorie:'Maconnerie'
     },
     {
-      name: "Product 3",
-      price: 3.7,
-      qte: 3,
+      name: 'Clous de fil',
+      img: 'wire-nails-500x500',
+      details: '5cm',
+      price: 2.5,
+      qte: 1,
+      categorie:'Maconnerie'
+    },
+    {
+      name: 'Astral matt',
+      img: 'dulux-flat-matt',
+      details: '5kg',
+      price: 2.5,
+      qte: 1,
+      categorie:'Peinture'
+    },
+    {
+      name: 'Astral etanche',
+      img: 'silo-MIN',
+      details: '5kg',
+      price: 2.5,
+      qte: 1,
+      categorie:'Peinture'
+    },
+    {
+      name: 'Conduite d\'eau ',
+      img: 'stainless-steel-water-pipe-500x500',
+      details: '⌀200mm',
+      price: 2.5,
+      qte: 1,
+      categorie:'Plomberie'
+    },
+    {
+      name: 'Multicouche',
+      img: 'Pex-Multilayer',
+      details: '⌀20mm',
+      price: 2.5,
+      qte: 1,
+      categorie:'Plomberie'
+    },
+    {
+      name: 'Ciment',
+      img: '514ofwJ1JVL._AC_SY355_',
+      details: '50Kg',
+      price: 2.5,
+      qte: 1,
+      categorie:'Maconnerie'
+    },
+    {
+      name: 'Clou',
+      img: '61tYal6UQ9L._AC_SL1360_',
+      details: '7cm',
+      price: 2.5,
+      qte: 1,
+      categorie:'Maconnerie'
+    },
+    {
+      name: 'Fil barbelé',
+      img: 'ae235',
+      details: 'hauteur 1m',
+      price: 2.5,
+      qte: 1,
+      categorie:'Maconnerie'
+    },
+    {
+      name: 'Clous de fil',
+      img: 'wire-nails-500x500',
+      details: '5cm',
+      price: 2.5,
+      qte: 1,
+      categorie:'Maconnerie'
+    },
+    {
+      name: 'Astral matt',
+      img: 'dulux-flat-matt',
+      details: '5kg',
+      price: 2.5,
+      qte: 1,
+      categorie:'Peinture'
+    },
+    {
+      name: 'Astral etanche',
+      img: 'silo-MIN',
+      details: '5kg',
+      price: 2.5,
+      qte: 1,
+      categorie:'Peinture'
+    },
+    {
+      name: 'Conduite d\'eau ',
+      img: 'stainless-steel-water-pipe-500x500',
+      details: '⌀200mm',
+      price: 2.5,
+      qte: 1,
+      categorie:'Plomberie'
+    },
+    {
+      name: 'Multicouche',
+      img: 'Pex-Multilayer',
+      details: '⌀20mm',
+      price: 2.5,
+      qte: 1,
+      categorie:'Plomberie'
     },
   ];
 
+  prodligne: Array<any> = [
+
+  ];
+
   control = new FormControl();
-  clients: string[] = ["Client normal", "Client 1", "Client 2", "Client 3"];
+  clients: string[] = ['Client normal', 'Client 1', 'Client 2', 'Client 3'];
   filteredClients: Observable<string[]>;
   control2 = new FormControl();
-  barcodes: string[] = ["07998011", "07998012", "07998013", "07998014"];
+  barcodes: string[] = ['07998011', '07998012', '07998013', '07998014'];
   filteredBarcodes: Observable<string[]>;
   constructor(private modalService: NgbModal) {
 
@@ -174,19 +204,25 @@ export class PosComponent implements OnInit {
       } else {
           return  'with: $reason';
       }}
+      staticprods;
   ngOnInit(): void {
-    this.total = this.prodligne
+    this.staticprods = this.Products;
+    if(this.prodligne.length != 0){
+      this.total = this.prodligne
       .map((a) => a.price * a.qte)
       .reduce(function (a, b) {
         return a + b;
       });
+    }
+    else this.total = 0;
+
     console.log(this.total);
     this.filteredClients = this.control.valueChanges.pipe(
-      startWith(""),
+      startWith(''),
       map((value) => this._filter(value))
     );
     this.filteredBarcodes = this.control2.valueChanges.pipe(
-      startWith(""),
+      startWith(''),
       map((value) => this._filter2(value))
     );
   }
@@ -204,12 +240,38 @@ export class PosComponent implements OnInit {
   }
 
   private _normalizeValue(value: string): string {
-    return value.toLowerCase().replace(/\s/g, "");
+    return value.toLowerCase().replace(/\s/g, '');
   }
 
   public downloadPDF() {
 
-    return xepOnline.Formatter.Format('content', { render: 'print',pageWidth:'5in',mimeType:'application/pdf',filename:'recu n°1' });
+    return xepOnline.Formatter.Format('content', { render: 'print', pageWidth: '5in', mimeType: 'application/pdf', filename: 'recu n°1' });
   }
 
+  public filterProds(c) {
+    this.Products = this.staticprods;
+    this.Products = this.Products.filter(p => {
+      return p.categorie === c;
+    })
+  }
+  public addprodligne(p){
+    this.prodligne.push(p);
+    this.total = this.prodligne
+    .map((a) => a.price * a.qte)
+    .reduce(function (a, b) {
+      return a + b;
+    });
+  }
+  public minusqte(i){
+    if(this.prodligne[i].qte > 1)
+    this.prodligne[i].qte -=1;
+  else this.prodligne.splice(i,1);
+
+}
+public plusqte(i){
+
+  this.prodligne[i].qte +=1;
+
+
+}
 }
