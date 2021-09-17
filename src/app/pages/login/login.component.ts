@@ -49,6 +49,9 @@ export class LoginComponent implements OnInit {
   }
 
   authenticate(){
+    if(this.login.length >= 3 && this.password.length >= 4){
+
+
    let credentials = {
       "username" : this.login,
       "password" : this.password
@@ -62,6 +65,9 @@ export class LoginComponent implements OnInit {
     }, err => {
       this.error = err.error.message;
     });
-
+  }
+  else{
+    this.error = "Please provide a valid login and password"
+  }
   }
 }
