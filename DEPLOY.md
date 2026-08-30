@@ -10,7 +10,9 @@ and serves the contents of `dist/`.
 | `vercel.json` | Install/build commands, output directory, SPA fallback, cache headers |
 | `.npmrc` | `legacy-peer-deps=true` — required, see "Dependency conflict" below |
 | `package.json` | `build:prod` script + `engines.node` pinned to `20.x` |
-| `src/environments/environment*.ts` | `apiUrl` used by the HTTP services |
+| `src/environments/environment*.ts` | `apiUrl` and `demoMode` used by the HTTP services |
+| `scripts/set-env.js` | Generates `environment.prod.ts` from `DEMO_MODE` / `API_URL` at build time |
+| `src/assets/mock/*.json` | Fixture data used when `DEMO_MODE=true` |
 
 ## Deploy
 
@@ -29,9 +31,47 @@ vercel        # preview deployment
 vercel --prod # production deployment
 ```
 
-## Connecting the backend (required for the app to work)
+## Demo mode (no backend)
 
-The app calls a backend on `/api/...` and `/rest/...`. In development those are
+Set `DEMO_MODE=true` in Vercel -> Settings -> Environment Variables to deploy a
+working demo with no backend at all. In that mode:
+
+- the login screen is skipped (`/` redirects straight to the dashboard) and the
+  admin layout accepts a placeholder token instead of bouncing to `/login`;
+- `AuthenticationService.authenticate()` accepts any credentials, so `/login`
+  still works if you navigate to it;
+- `ClientsService` and `UsersService` read `src/assets/mock/*.json` instead of
+  calling the backend.
+
+None of the real authentication code is removed - every branch above is guarded
+by `environment.demoMode`, so clearing the variable restores normal behaviour.
+
+Angular bakes environment files in at build time, so the variable is read during
+the build by `scripts/set-env.js`, which regenerates
+`src/environments/environment.prod.ts`. It runs automatically as the
+`prebuild:prod` npm hook - no change to the build command is needed. The same
+script also reads `API_URL`, which is the easiest way to point a real
+deployment at a backend without editing code.
+
+With neither variable set the generated file is identical to the one committed,
+so local builds leave the working tree clean.
+
+### Adding more mock data
+
+Only two pages fetch over HTTP: **Clients** and **Personnels**. Every other page
+(products, categories, sales, deposits, providers, POS) already renders
+hardcoded arrays inside its component, so it works with or without a backend.
+To extend the demo data, edit `src/assets/mock/clients.json` or
+`src/assets/mock/users.json`.
+
+Note that `stuff.component.ts` fetches users but still renders its own
+hardcoded `Stuffs` array - the fetched JSON is only logged. That is pre-existing
+behaviour, left as-is; wire `Stuffs` to the response if you want the mock file
+to drive that table.
+
+## Connecting the backend (required outside demo mode)
+
+Unless `DEMO_MODE` is set, the app calls a backend on `/api/...` and `/rest/...`. In development those are
 forwarded to `http://localhost:8080` by `src/proxy.conf.json`. **That proxy does
 not exist on Vercel** — Vercel only serves the static build — so the backend has
 to be reachable another way. Until you do one of the following, the deployed app

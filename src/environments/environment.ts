@@ -4,6 +4,8 @@
 
 export const environment = {
   production: false,
+  // Set to true to develop against the mock JSON data with no backend running.
+  demoMode: false,
   // Empty in development: requests stay relative and are forwarded to
   // http://localhost:8080 by the dev proxy (src/proxy.conf.json).
   apiUrl: ''

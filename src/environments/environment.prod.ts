@@ -1,10 +1,11 @@
+// GENERATED FILE - do not edit by hand.
+// Written by scripts/set-env.js on every 'npm run build:prod'.
+// Change the DEMO_MODE / API_URL environment variables instead.
 export const environment = {
   production: true,
-  // Base URL of the backend API.
-  // Empty means requests stay relative ('/api/...', '/rest/...'), which only
-  // works if something in front of the app forwards them to the backend
-  // (see the `rewrites` example in DEPLOY.md).
-  // Otherwise set the full origin of the deployed backend,
-  // e.g. 'https://my-backend.example.com'.
+  // When true the app runs with no backend: authentication is bypassed and the
+  // services resolve to src/assets/mock/*.json instead of HTTP endpoints.
+  demoMode: false,
+  // Base URL of the backend API. Empty keeps requests relative.
   apiUrl: ''
 };

@@ -12,7 +12,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
-    "build:prod": "ng build --prod"
+    "build:prod": "ng build --prod",
+    "prebuild:prod": "node scripts/set-env.js"
   },
   "private": true,
   "dependencies": {
