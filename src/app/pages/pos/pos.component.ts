@@ -3,8 +3,8 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { ReceiptPdfService } from '../../receipt-pdf.service';
 import { cpuUsage } from 'process';
-declare var xepOnline: any;
 @Component({
   selector: 'app-pos',
   templateUrl: './pos.component.html',
@@ -165,7 +165,7 @@ export class PosComponent implements OnInit {
   control2 = new FormControl();
   barcodes: string[] = ['07998011', '07998012', '07998013', '07998014'];
   filteredBarcodes: Observable<string[]>;
-  constructor(private modalService: NgbModal) {
+  constructor(private modalService: NgbModal,private receiptPdf: ReceiptPdfService) {
 
     NgbModal.prototype['c'] = NgbModal.prototype.dismissAll;
         NgbModal.prototype.dismissAll = function (reason: string) {
@@ -245,7 +245,7 @@ export class PosComponent implements OnInit {
 
   public downloadPDF() {
 
-    return xepOnline.Formatter.Format('content', { render: 'print', pageWidth: '5in', mimeType: 'application/pdf', filename: 'recu n°1' });
+    return this.receiptPdf.print();
   }
 
   public filterProds(c) {

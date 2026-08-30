@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { ReceiptPdfService } from '../../receipt-pdf.service';
 
-declare var xepOnline: any;
 @Component({
   selector: 'app-provider',
   templateUrl: './provider.component.html',
@@ -120,7 +120,7 @@ export class ProviderComponent implements OnInit {
       qte: 3,
     },
   ];
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal,private receiptPdf: ReceiptPdfService) { }
 
   ngOnInit(): void {
     this.staticProviders = this.Providers;
@@ -205,6 +205,6 @@ applySearch() {
 
     public downloadPDF() {
 
-      return xepOnline.Formatter.Format('content', { render: 'print',pageWidth:'5in',mimeType:'application/pdf',filename:'recu n°1' });
+      return this.receiptPdf.print();
     }
 }

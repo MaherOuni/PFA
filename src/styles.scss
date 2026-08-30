@@ -101,3 +101,61 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .epilogue{
   font-family: 'Epilogue', sans-serif;
 }
+
+/*
+ * Receipt printing.
+ *
+ * The "Imprimer" buttons call window.print(). The receipt lives in #content
+ * inside an ng-bootstrap modal, so everything else on the page is hidden and
+ * the modal chrome is flattened, leaving only the receipt on the sheet.
+ */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #content,
+  #content * {
+    visibility: visible;
+  }
+
+  #content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Modal chrome would otherwise reserve space or paint over the receipt. */
+  .modal-backdrop,
+  .modal-header,
+  .modal-footer {
+    display: none !important;
+  }
+
+  .modal,
+  .modal-dialog,
+  .modal-content,
+  .modal-body {
+    position: static !important;
+    display: block !important;
+    width: auto !important;
+    max-width: none !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    background: none !important;
+    animation: none !important;
+    transition: none !important;
+    top: 0 !important;
+  }
+
+  @page {
+    margin: 8mm;
+  }
+}
