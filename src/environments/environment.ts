@@ -4,6 +4,9 @@
 
 export const environment = {
   production: false,
+  // Empty in development: requests stay relative and are forwarded to
+  // http://localhost:8080 by the dev proxy (src/proxy.conf.json).
+  apiUrl: ''
 };
 
 /*

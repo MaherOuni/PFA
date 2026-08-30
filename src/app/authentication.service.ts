@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class AuthenticationService {
   constructor(public http: HttpClient) { }
   authenticate(credentials) {
 
-    const url = '/api/authenticate';
+    const url = `${environment.apiUrl}/api/authenticate`;
     this.header = new HttpHeaders();
     this.header.append('Content-Type', 'application/json');
     return this.http.post(url, credentials, {headers: {skip:'true'}});
