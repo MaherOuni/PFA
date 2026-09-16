@@ -1,204 +1,166 @@
-import { Component, OnInit } from '@angular/core';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
 import { ReceiptPdfService } from '../../receipt-pdf.service';
+import { DemoService } from '../../demo/demo.service';
+import { DemoStoreService } from '../../demo/demo-store.service';
+
+const PAGE_SIZE = 6;
 
 @Component({
   selector: 'app-sale',
   templateUrl: './sale.component.html',
   styleUrls: ['./sale.component.css']
 })
-export class SaleComponent implements OnInit {
+export class SaleComponent implements OnInit, OnDestroy {
   index;
   pages = 0;
   page = 0;
-  mod = 0;
-  newSale ={
-    id: '',
-    clientfn:'',
-    clientln:'',
-    date:'',
-    amount: 0 ,
-    discount:0,
-    payed:0
-  }
+  newSale = this.blankSale();
   search = '';
-  staticSales:any;
+  staticSales: any[] = [];
   closeResult: string;
   editSale: any = null;
   deleteSale: any = null;
   inspectSale: any = null;
-  editingSale:any;
+  editingSale: any;
 
+  Sales: any[] = [];
 
-
-  Sales = [
-    {
-      id:'942042',
-      date:'15/10/2019 15:14',
-      amount:79.9,
-      discount:5,
-      payed:0,
-      clientfn:'Alison',
-      clientln:'Campbell'
-    },
-    {
-      id:'201305',
-      date:'21/11/2019 09:30',
-      amount:132.4,
-      discount:10,
-      payed:110,
-      clientfn:'Nicholas',
-      clientln:'Bailey'
-    },
-    {
-      id:'648302',
-      date:'06/01/2020 14:02',
-      amount:355.72,
-      discount:15,
-      payed:302.362,
-      clientfn:'Thomas',
-      clientln:'Gray'
-    },
-    {
-      id:'942042',
-      date:'15/10/2019 15:14',
-      amount:79.9,
-      discount:5,
-      payed:0,
-      clientfn:'Alison',
-      clientln:'Campbell'
-    },
-    {
-      id:'201305',
-      date:'21/11/2019 09:30',
-      amount:132.4,
-      discount:10,
-      payed:110,
-      clientfn:'Nicholas',
-      clientln:'Bailey'
-    },
-    {
-      id:'648302',
-      date:'06/01/2020 14:02',
-      amount:355.72,
-      discount:15,
-      payed:302.362,
-      clientfn:'Thomas',
-      clientln:'Gray'
-    }
-  ];
   prodligne: Array<any> = [
-    {
-      name: "Product 1",
-      price: 2.5,
-      qte: 1,
-    },
-    {
-      name: "Product 2",
-      price: 6.3,
-      qte: 2,
-    },
-    {
-      name: "Product 3",
-      price: 3.7,
-      qte: 5,
-    },
-    {
-      name: "Product 3",
-      price: 3.7,
-      qte: 3,
-    },
+    { name: 'Ciment gris CEM II', price: 12.500, qte: 10 },
+    { name: 'Clou de charpente',  price: 14.200, qte: 2 },
+    { name: 'Peinture mate blanche', price: 142.000, qte: 1 },
+    { name: 'Raccord laiton',     price: 34.500, qte: 3 },
   ];
-  constructor(private modalService: NgbModal,private receiptPdf: ReceiptPdfService) { }
+
+  private sub = new Subscription();
+
+  constructor(private modalService: NgbModal,
+              private receiptPdf: ReceiptPdfService,
+              private store: DemoStoreService,
+              private demo: DemoService) { }
 
   ngOnInit(): void {
+    this.reload();
+    this.sub.add(this.demo.resets$.subscribe(() => this.reload()));
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+
+  private reload(): void {
+    this.Sales = this.store.sales;
     this.staticSales = this.Sales;
-    this.Sales.length % 6 ? this.mod = 1 : this.mod = 0;
-    this.pages = (Math.floor(this.Sales.length / 6)) + this.mod;
+    this.newSale = this.blankSale();
+    this.page = 0;
+    this.recount();
   }
-  filterNameAsc() {
 
-    this.Sales = this.Sales.sort((a, b) => (a.id > b.id) ? 1 : -1);
+  private blankSale() {
+    return { id: '', clientfn: '', clientln: '', date: '', amount: 0, discount: 0, payed: 0 };
   }
-  filterNameDesc() {
 
-    this.Sales = this.Sales.sort((a, b) => (a.id < b.id) ? 1 : -1);
-  }
-  open(content, type, modalDimension) {
-    if ( type !== 'Notification') {
-    this.modalService.open(content, { windowClass: 'modal-mini', size: 'sm', centered: true }).result.then((result) => {
-        this.closeResult = 'Closed with: $result';
-    }, (reason) => {
-        this.closeResult = 'Dismissed $this.getDismissReason(reason)';
-    }); } else {
-      this.modalService.open(content, { windowClass: 'modal-danger', centered: true }).result.then((result) => {
-        this.closeResult = 'Closed with: $result';
-    }, (reason) => {
-        this.closeResult = 'Dismissed $this.getDismissReason(reason)';
-    });
+  private recount(): void {
+    this.pages = Math.ceil(this.Sales.length / PAGE_SIZE);
+    if (this.page >= this.pages) {
+      this.page = Math.max(0, this.pages - 1);
     }
-
-}
-open2(content, type, modalDimension){
-  this.modalService.open(content, { windowClass: 'modal', size: 'lg', centered: true }).result.then((result) => {
-    this.closeResult = 'Closed with: $result';
-}, (reason) => {
-    this.closeResult = 'Dismissed $this.getDismissReason(reason)';
-});
-}
-applySearch() {
-  this.Sales = this.staticSales;
-   this.Sales = this.Sales.filter((p) => {
-      return p.id.toUpperCase().includes(this.search.toUpperCase());
-    });
   }
+
+  private commit(): void {
+    this.store.commit('sales', this.staticSales);
+  }
+
+  filterNameAsc() {
+    this.Sales = [...this.Sales].sort((a, b) => (a.id > b.id) ? 1 : -1);
+  }
+
+  filterNameDesc() {
+    this.Sales = [...this.Sales].sort((a, b) => (a.id < b.id) ? 1 : -1);
+  }
+
+  open(content, type, modalDimension) {
+    if (type !== 'Notification') {
+      // These forms run to eight fields. 'sm' with no scrolling clipped the
+      // lower half of the dialog on short viewports and left the Enregistrer
+      // button unreachable.
+      this.modalService.open(content, { size: 'md', centered: true, scrollable: true })
+        .result.then(() => { this.closeResult = 'Closed'; },
+                     () => { this.closeResult = 'Dismissed'; });
+    } else {
+      this.modalService.open(content, { windowClass: 'modal-danger', centered: true })
+        .result.then(() => { this.closeResult = 'Closed'; },
+                     () => { this.closeResult = 'Dismissed'; });
+    }
+  }
+
+  open2(content, type, modalDimension) {
+    this.modalService.open(content, { windowClass: 'modal', size: 'lg', centered: true })
+      .result.then(() => { this.closeResult = 'Closed'; },
+                   () => { this.closeResult = 'Dismissed'; });
+  }
+
+  applySearch() {
+    const needle = this.search.toUpperCase();
+    // Searching a sale by the customer's name is at least as useful as by its
+    // number, and the placeholder already promised both.
+    this.Sales = this.staticSales.filter(s =>
+      s.id.toUpperCase().includes(needle) ||
+      `${s.clientfn} ${s.clientln}`.toUpperCase().includes(needle));
+    this.page = 0;
+    this.recount();
+  }
+
   pagingForward() {
     if (this.page + 1 < this.pages) {
-    this.page += 1;
+      this.page += 1;
     }
   }
+
   pagingBackward() {
-  if (this.page >= 1) {
-    this.page -= 1;
+    if (this.page >= 1) {
+      this.page -= 1;
+    }
   }
-  }
+
   SaleDelete() {
-    this.staticSales =  this.staticSales.filter((p) => {
-       return   p.id != this.deleteSale.id;
-      });
-      this.Sales =  this.Sales.filter((p) => {
-        return   p.id != this.deleteSale.id;
-       });
-    }
-    saveedit() {
-      this.Sales[this.index] = this.editingSale;
-    }
-    savenew(){
-      let sale = {
-        id: '',
-        clientfn:'',
-        clientln:'',
-        date:'',
-        amount: 0 ,
-        discount:0,
-        payed:0
-      }
-      sale.id = this.newSale.id
-      sale.date = this.newSale.date
-      sale.amount = this.newSale.amount
-      sale.discount = this.newSale.discount
-      sale.payed = this.newSale.payed
-      sale.clientfn= this.newSale.clientfn
-      sale.clientln=this.newSale.clientln
+    this.staticSales = this.staticSales.filter(s => s.id !== this.deleteSale.id);
+    this.Sales = this.Sales.filter(s => s.id !== this.deleteSale.id);
+    this.recount();
+    this.commit();
+  }
 
-    this.Sales.push(sale);
-    this.Sales.length % 6 ? this.mod = 1 : this.mod = 0;
-    this.pages = (Math.floor(this.Sales.length / 6)) + this.mod;
-    }
+  saveedit() {
+    this.editSale = this.editingSale;
+    this.commit();
+  }
 
-    public downloadPDF() {
+  savenew() {
+    const sale = { ...this.newSale };
+    sale.id = sale.id || String(Date.now()).slice(-6);
+    sale.amount = Number(sale.amount) || 0;
+    sale.discount = Number(sale.discount) || 0;
+    sale.date = sale.date || this.now();
 
-      return this.receiptPdf.print();
-    }
+    this.staticSales.unshift(sale);
+    this.Sales = this.staticSales;
+    this.recount();
+    this.commit();
 
+    this.newSale = this.blankSale();
+  }
+
+  /** 'DD/MM/YYYY HH:mm', the format the rest of the sale rows use. */
+  private now(): string {
+    const d = new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ` +
+           `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+
+  public downloadPDF() {
+    return this.receiptPdf.print();
+  }
 }

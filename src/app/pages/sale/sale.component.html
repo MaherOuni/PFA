@@ -1,14 +1,18 @@
-<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8"></div>
-<div class="container-fluid">
+<div class="page-container container-fluid">
+  <div class="page-head">
+    <div>
+      <h1 class="page-head-title">Ventes</h1>
+      <p class="page-head-sub">Transactions, remises et encaissements</p>
+    </div>
+  </div>
   <div class="card maincard">
     <div class="card-head">
-      <h3 class="col-md-3">Ventes</h3>
-      <div class="col-md-6 row">
+      <div class="col-md-8 row">
         <input
           placeholder="Chercher une vente par numéro"
           type="text"
-          class="form-control-alternative text-center form-control col-md-11"
-          style="margin-right: 5px; max-height: 30px"
+          class="form-control-alternative form-control col-md-11"
+          style="margin-right: 8px"
           (change)="search = $event.target.value"
         />
         <button
@@ -20,7 +24,7 @@
           <i class="fas fa-search"></i>
         </button>
       </div>
-      <div class="col-md-3" style="text-align: end">
+      <div class="col-md-4" style="text-align: end">
         <div class="col-md-3" style="display: contents" ngbDropdown>
           <a class="btn btn-info btn-sm" ngbDropdownToggle>
             <span class="btn-inner--icon"
@@ -137,52 +141,52 @@
     </div>
     <div class="modal-body col">
       <form>
-        <h3>Nom:</h3>
+        <label class="form-control-label">Nom</label>
         <input
           placeholder="nom du Sale"
           type="text"
           [value]="editSale.lastname"
-          class="form-control-alternative text-center form-control col-md-12"
+          class="form-control-alternative form-control col-md-12"
           style="margin-bottom: 12px"
           (change)="editingSale.lastname = $event.target.value"
 
         />
-      <h3>Prénom</h3>
+      <label class="form-control-label">Prénom</label>
       <input
         placeholder="prénom du Sale"
         type="text"
         [value]="editSale.firstname"
-        class="form-control-alternative text-center form-control col-md-12"
+        class="form-control-alternative form-control col-md-12"
         style="margin-bottom: 12px"
         (change)="editingSale.firstname = $event.target.value"
 
       />
-      <h3>Téléphone</h3>
+      <label class="form-control-label">Téléphone</label>
       <input
         placeholder="numéro du Sale"
         type="number"
         [value]="editSale.phone"
-        class="form-control-alternative text-center form-control col-md-12"
+        class="form-control-alternative form-control col-md-12"
         style="margin-bottom: 12px"
         (change)="editingSale.phone = $event.target.value"
 
       />
-      <h3>Email</h3>
+      <label class="form-control-label">Email</label>
       <input
         placeholder="mail du Sale"
         type="email"
         [value]="editSale.email"
-        class="form-control-alternative text-center form-control col-md-12"
+        class="form-control-alternative form-control col-md-12"
         style="margin-bottom: 12px"
         (change)="editingSale.email = $event.target.value"
 
       />
-      <h3>Address</h3>
+      <label class="form-control-label">Address</label>
       <input
         placeholder="address du Sale"
         type="text"
         [value]="editSale.adresse"
-        class="form-control-alternative text-center form-control col-md-12"
+        class="form-control-alternative form-control col-md-12"
         style="margin-bottom: 12px"
         (change)="editingSale.adresse = $event.target.value"
 

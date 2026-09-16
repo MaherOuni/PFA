@@ -1,73 +1,62 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthenticationService } from '../../authentication.service';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { DemoService } from '../../demo/demo.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  login=undefined;
-  password=undefined;
-  closeResult: string;
-  constructor(private auth:AuthenticationService, private router: Router,private modalService: NgbModal) {}
-  error=null;
+  login = '';
+  password = '';
+  error: string = null;
+
+  constructor(private auth: AuthenticationService,
+              private router: Router,
+              public demo: DemoService) {}
+
   ngOnInit() {
-  }
-  open(content, type, modalDimension) {
-    if (modalDimension === 'sm' && type === 'modal_mini') {
-        this.modalService.open(content, { windowClass: 'modal-mini', size: 'sm', centered: true }).result.then((result) => {
-            this.closeResult = 'Closed with: $result';
-        }, (reason) => {
-            this.closeResult = 'Dismissed $this.getDismissReason(reason)';
-        });
-    } else if (modalDimension === '' && type === 'Notification') {
-      this.modalService.open(content, { windowClass: 'modal-danger', centered: true }).result.then((result) => {
-          this.closeResult = 'Closed with: $result';
-      }, (reason) => {
-          this.closeResult = 'Dismissed $this.getDismissReason(reason)';
-      });
-    } else {
-        this.modalService.open(content,{ centered: true }).result.then((result) => {
-            this.closeResult = 'Closed with: $result';
-        }, (reason) => {
-            this.closeResult = 'Dismissed $this.getDismissReason(reason)';
-        });
+    // Already in the demo - from a baked-in DEMO_MODE build, a ?demo=1 link or
+    // an earlier visit - so there is nothing to authenticate against. Skip the
+    // form. Leaving the demo clears the flag and brings this screen back.
+    if (this.demo.active) {
+      this.router.navigate(['/dashboard']);
     }
   }
 
-  private getDismissReason(reason: any): string {
-      if (reason === ModalDismissReasons.ESC) {
-          return 'by pressing ESC';
-      } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-          return 'by clicking on a backdrop';
-      } else {
-          return  'with: $reason';
-      }
-  }
-
-  authenticate(){
-    if(this.login.length >= 3 && this.password.length >= 4){
-
-
-   let credentials = {
-      "username" : this.login,
-      "password" : this.password
+  authenticate() {
+    // `login` used to be undefined until the first keystroke, so submitting an
+    // empty form threw on `.length` instead of showing the validation message.
+    if (!this.login || this.login.length < 3 || !this.password || this.password.length < 4) {
+      this.error = 'Identifiant ou mot de passe invalide.';
+      return;
     }
+
+    this.error = null;
+
+    const credentials = {
+      username: this.login,
+      password: this.password
+    };
 
     this.auth.authenticate(credentials).subscribe((response) => {
-      this.auth.jwt=response['jwt'];
-        localStorage.setItem("jwt",response['jwt'])
-
-      this.router.navigate(["/dashboard"])
+      this.auth.jwt = response['jwt'];
+      localStorage.setItem('jwt', response['jwt']);
+      this.router.navigate(['/dashboard']);
     }, err => {
-      this.error = err.error.message;
+      // A backend that is down gives no err.error.message to read.
+      this.error = (err.error && err.error.message)
+        || 'Connexion impossible. Verifiez vos identifiants ou reessayez plus tard.';
     });
   }
-  else{
-    this.error = "Please provide a valid login and password"
-  }
+
+  /** Turns on demo mode and drops the visitor straight into the dashboard. */
+  startDemo() {
+    this.demo.enable();
+    localStorage.setItem('jwt', 'demo-mode-token');
+    this.auth.jwt = 'demo-mode-token';
+    this.router.navigate(['/dashboard']);
   }
 }

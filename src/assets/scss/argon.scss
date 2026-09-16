@@ -69,4 +69,8 @@
 @import "custom/vendors";
 
 // Angular Differences
-@import "angular-differences/angular-differences"
+@import "angular-differences/angular-differences";
+
+// Modern theme layer - must stay last so it can override everything above.
+@import "theme/theme";
+

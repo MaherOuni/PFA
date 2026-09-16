@@ -1,14 +1,18 @@
-<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8"></div>
-<div class="container-fluid">
+<div class="page-container container-fluid">
+  <div class="page-head">
+    <div>
+      <h1 class="page-head-title">Produits</h1>
+      <p class="page-head-sub">Catalogue, stock et approvisionnement</p>
+    </div>
+  </div>
   <div class="card maincard">
     <div class="card-head">
-      <h3 class="col-md-3">Produits</h3>
-      <div class="col-md-6 row">
+      <div class="col-md-8 row">
         <input
           placeholder="Chercher un produit par son nom ou reference"
           type="text"
-          class="form-control-alternative text-center form-control col-md-11"
-          style="margin-right: 5px; max-height: 30px"
+          class="form-control-alternative form-control col-md-11"
+          style="margin-right: 8px"
           (change)="search = $event.target.value"
         />
         <button
@@ -20,7 +24,7 @@
           <i class="fas fa-search"></i>
         </button>
       </div>
-      <div class="col-md-3" style="text-align: end">
+      <div class="col-md-4" style="text-align: end">
         <div class="col-md-3" style="display: contents;" ngbDropdown >
           <a
             class="btn btn-info btn-sm "
@@ -85,16 +89,18 @@
                 </div>
               </th>
               <td>{{ Product.ref }}</td>
-              <td style="color: #2dce89">{{ Product.price }} TND</td>
+              <td class="price-cell">{{ Product.price | number:'1.3-3':'fr' }} TND</td>
               <td>
-                <img
-                  class="prodimg"
-                  alt="Image placeholder"
-                  src="../../../assets/img/icons/common/{{
-                    Product.category
-                  }}.png"
-                />
-                {{ Product.category }}
+                <!-- The category icon used to render at the 40px product
+                     thumbnail size, making this the widest column of nine. -->
+                <span class="cat-chip">
+                  <img
+                    class="caticon"
+                    alt=""
+                    src="../../../assets/img/icons/common/{{ Product.category }}.png"
+                  />
+                  {{ Product.category }}
+                </span>
               </td>
               <td>{{ Product.supplier }}</td>
               <td>
@@ -260,66 +266,90 @@
           <label class="custom-file-label" for="customFileLang">Upload an image</label>
           </div>
         </div>
-      <h3>Nom du produit:</h3>
-      <input
-        placeholder="Nom du produit"
-        type="text"
-        class="form-control-alternative text-center form-control col-md-12"
-        style="margin-bottom: 12px"
-        (change)="newProduct.name = $event.target.value"
-      />
-      <h3>Reference:</h3>
-      <input
-        placeholder="numero de reference"
-        type="number"
-        class="form-control-alternative text-center form-control col-md-12"
-        style="margin-bottom: 12px"
-        (change)="newProduct.ref = $event.target.value"
-      />
-
-      <h3>Catégorie:</h3>
-      <div style="margin-bottom: 12px" class="form-group">
-
-        <select class="form-control-alternative text-center form-control" (change)="newProduct.category= $event.target.value" id="exampleFormControlSelect1">
-          <option *ngFor="let categorie of Categories">{{categorie.name}}</option>
-
-        </select>
-      </div>
-      <h3>Dépôt:</h3>
-      <div style="margin-bottom: 12px" class="form-group">
-
-        <select class="form-control-alternative text-center form-control" (change)="newProduct.deposit = $event.target.value" id="exampleFormControlSelect2">
-          <option *ngFor="let depot of Depots">{{depot}}</option>
-
-        </select>
-      </div>
-
-      <h3>Quantité:</h3>
-      <input
-        placeholder="Quantité"
-        type="number"
-        class="form-control-alternative text-center form-control col-md-12"
-        style="margin-bottom: 12px"
-        (change)="newProduct.qtestock = $event.target.value"
-      />
-      <h3>Prix:</h3>
-      <div class="row col" style="margin-bottom: 12px">
+      <div class="form-group">
+        <label class="form-control-label" for="np-name">Nom du produit</label>
         <input
-          placeholder="prix en dinar"
+          id="np-name"
+          placeholder="Ex. Ciment gris CEM II"
           type="text"
-          class="form-control-alternative text-center form-control col-md-10"
-          style="margin-bottom: 12px; margin-right: 0"
-          (change)="newProduct.price = $event.target.value"
+          class="form-control-alternative form-control"
+          (change)="newProduct.name = $event.target.value"
         />
-        <span
-          style="
-            margin-left: 5%;
-            margin-top: 8px;
-            font-weight: bold;
-            color: #2dce89;
-          "
-          >TND</span
-        >
+      </div>
+
+      <div class="form-group">
+        <!-- References are alphanumeric (MAC-1001), so this cannot be a
+             number input - it silently rejected anything but digits. -->
+        <label class="form-control-label" for="np-ref">Reference</label>
+        <input
+          id="np-ref"
+          placeholder="Ex. MAC-1001"
+          type="text"
+          class="form-control-alternative form-control"
+          (change)="newProduct.ref = $event.target.value"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-control-label" for="np-details">Conditionnement</label>
+        <input
+          id="np-details"
+          placeholder="Ex. Sac 50 kg"
+          type="text"
+          class="form-control-alternative form-control"
+          (change)="newProduct.details = $event.target.value"
+        />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label class="form-control-label" for="np-cat">Categorie</label>
+          <select id="np-cat" class="form-control-alternative form-control" (change)="newProduct.category = $event.target.value">
+            <option *ngFor="let categorie of Categories">{{categorie.name}}</option>
+          </select>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label class="form-control-label" for="np-dep">Depot</label>
+          <select id="np-dep" class="form-control-alternative form-control" (change)="newProduct.deposit = $event.target.value">
+            <option *ngFor="let depot of Depots">{{depot}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-control-label" for="np-sup">Fournisseur</label>
+        <select id="np-sup" class="form-control-alternative form-control" (change)="newProduct.supplier = $event.target.value">
+          <option value="">-- Selectionner --</option>
+          <option *ngFor="let sup of Suppliers">{{sup}}</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label class="form-control-label" for="np-qte">Quantite en stock</label>
+          <input
+            id="np-qte"
+            placeholder="0"
+            type="number"
+            min="0"
+            class="form-control-alternative form-control"
+            (change)="newProduct.qtestock = $event.target.value"
+          />
+        </div>
+
+        <div class="form-group col-md-6">
+          <label class="form-control-label" for="np-price">Prix (TND)</label>
+          <input
+            id="np-price"
+            placeholder="0.000"
+            type="number"
+            min="0"
+            step="0.001"
+            class="form-control-alternative form-control"
+            (change)="newProduct.price = $event.target.value"
+          />
+        </div>
       </div>
     </form>
     </div>
@@ -361,58 +391,58 @@
           <label class="custom-file-label" for="customFileLang">Upload an image</label>
           </div>
         </div>
-      <h3>Nom du produit</h3>
+      <label class="form-control-label">Nom du produit</label>
       <input
         placeholder="Nom du produit"
         type="text"
         [value]="editProduct.name"
-        class="form-control-alternative text-center form-control col-md-12"
+        class="form-control-alternative form-control col-md-12"
         style="margin-bottom: 12px"
         (change)="editingProduct.name = $event.target.value"
       />
-      <h3>Reference:</h3>
+      <label class="form-control-label">Reference</label>
       <input
         placeholder="numero de reference"
         type="number"
         [value]="editProduct.ref"
-        class="form-control-alternative text-center form-control col-md-12"
+        class="form-control-alternative form-control col-md-12"
         style="margin-bottom: 12px"
         (change)="editingProduct.ref = $event.target.value"
       />
 
-      <h3>Catégorie:</h3>
+      <label class="form-control-label">Catégorie</label>
       <div style="margin-bottom: 12px" class="form-group">
 
-        <select class="form-control-alternative text-center form-control" id="exampleFormControlSelect1" [(ngModel)]="editProduct.category" (change)="editingProduct.category = $event.target.value" [ngModelOptions]="{standalone: true}" >
+        <select class="form-control-alternative form-control" id="exampleFormControlSelect1" [(ngModel)]="editProduct.category" (change)="editingProduct.category = $event.target.value" [ngModelOptions]="{standalone: true}" >
           <option *ngFor="let categorie of Categories" [value]="categorie.name">{{categorie.name}}</option>
 
         </select>
       </div>
-      <h3>Dépôt:</h3>
+      <label class="form-control-label">Dépôt</label>
       <div style="margin-bottom: 12px" class="form-group">
 
-        <select class="form-control-alternative text-center form-control" id="exampleFormControlSelect2" [(ngModel)]="editProduct.deposit" (change)="editingProduct.deposit = $event.target.value" [ngModelOptions]="{standalone: true}">
+        <select class="form-control-alternative form-control" id="exampleFormControlSelect2" [(ngModel)]="editProduct.deposit" (change)="editingProduct.deposit = $event.target.value" [ngModelOptions]="{standalone: true}">
           <option *ngFor="let depot of Depots" [value]="depot" >{{depot}}</option>
 
         </select>
       </div>
 
-      <h3>Quantité:</h3>
+      <label class="form-control-label">Quantité</label>
       <input
         placeholder="Quantité"
         type="number"
         [value]="editProduct.qtestock"
-        class="form-control-alternative text-center form-control col-md-12"
+        class="form-control-alternative form-control col-md-12"
         style="margin-bottom: 12px"
         (change)="editingProduct.qtestock = $event.target.value"
       />
-      <h3>Prix:</h3>
+      <label class="form-control-label">Prix</label>
       <div class="row col" style="margin-bottom: 12px">
         <input
           placeholder="prix en dinar"
           type="text"
           [value]="editProduct.price"
-          class="form-control-alternative text-center form-control col-md-10"
+          class="form-control-alternative form-control col-md-10"
           style="margin-bottom: 12px; margin-right: 0"
           (change)="editingProduct.price = $event.target.value"
         />

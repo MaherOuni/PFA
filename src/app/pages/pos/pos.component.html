@@ -1,5 +1,10 @@
-<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8"></div>
-<div class="container-fluid mt--7">
+<div class="page-container container-fluid">
+  <div class="page-head">
+    <div>
+      <h1 class="page-head-title">Point de vente</h1>
+      <p class="page-head-sub">Encaissement et edition de ticket</p>
+    </div>
+  </div>
   <div class="row">
     <div class="col-xl-7 mb-4 mb-xl-0">
       <div class="card maincard">
@@ -30,7 +35,7 @@
               </div>
             </form>
             <div class="col-md-12 categoriesDiv">
-              <span id="all" class="badge badge-pill badge-danger" (click)="Products = staticprods">Tous</span>
+              <span id="all" class="badge badge-pill badge-danger" (click)="showAll()">Tous</span>
               <span
                 *ngFor="let categorie of Categories"
                 class="badge badge-pill badge-info"
@@ -45,15 +50,16 @@
                   style="padding: 0"
                   class="col-md-3 col-xl-3"
                 >
-                  <div class="card prodcard" (click)="addprodligne(product)">
+                  <div class="card prodcard h-100 d-flex flex-column" (click)="addprodligne(product)">
                     <img
                       class="card-img-top"
-                      src="../../../assets/img/products/{{ product.img }}.jpg"
+                      src="../../../assets/img/products/{{ product.img }}"
                       alt="Card image cap"
                     />
                     <div class="cardContent">
                       <h5 class="titlecard">{{ product.name }}</h5>
-                      <p class="detail" >Detail: {{ product.details }}</p>
+                      <p class="detail">{{ product.details }}</p>
+                      <p class="price">{{ product.price.toFixed(3) }} TND</p>
                     </div>
                   </div>
                 </div>
@@ -140,7 +146,7 @@
                   <th scope="row" class="paddingl-1">
                     {{ prod.name }}
                   </th>
-                  <td class="paddingl-1">{{ prod.price }} TND</td>
+                  <td class="paddingl-1">{{ prod.price.toFixed(3) }} TND</td>
                   <td class="paddingl-1">
                     <div class="row">
                       <button
@@ -171,7 +177,7 @@
                       class="btn btn-icon btn-2 btn-danger btn-sm"
                       id="btn-add"
                       type="button"
-                      (click)="prodligne.splice(i,1)"
+                      (click)="removeLine(i)"
                     >
                       <span class="btn-inner--icon"
                         ><lord-icon
@@ -208,18 +214,11 @@
 
             <div class="row">
               <h4 style="width: auto; padding: 15px; margin: 0">Remise:</h4>
-              <div
-                class="form-group"
-                style="
-                  width: 100px;
-                  padding: 15px;
-                  position: absolute;
-                  right: 0;
-                  margin: 0;
-                "
-              >
-                <div class="input-group mb-4">
-                  <input class="form-control" placeholder="5" type="text" />
+              <!-- Was 100px wide including the % addon, which left the field
+                   itself at 33px: too narrow to read the value being edited. -->
+              <div class="form-group discount-field">
+                <div class="input-group mb-0">
+                  <input class="form-control" placeholder="0" type="number" min="0" max="100" [value]="discount" (input)="setDiscount($event.target.value)" />
                   <div class="input-group-append">
                     <span class="input-group-text"
                       ><i class="fas fa-percent awesome"></i
@@ -239,12 +238,12 @@
                   margin: 0;
                 "
               >
-                {{ (total - (total * 5) / 100).toFixed(3) }} TND
+                {{ netTotal.toFixed(3) }} TND
               </h4>
             </div>
           </div>
           <div class="row col-md-12 validation m-top">
-            <button type="button" class="btn btn-warning col-md-5 m-auto">
+            <button type="button" class="btn btn-warning col-md-5 m-auto" (click)="resetTicket()">
               Reset
             </button>
             <button type="button" class="btn btn-success col-md-5" (click)="open(classic,'' , '')">
@@ -290,7 +289,7 @@
               <td style="text-align:center; width:30px;" class="typ">{{i+1}}</td>
               <td style="text-align:left; width:180px;" class="typ">{{prod.name}}</td>
               <td style="text-align:center; width:50px;" class="typ">{{prod.qte}}</td>
-              <td style="text-align:right; width:70px; " class="typ">{{prod.price}} TND</td>
+              <td style="text-align:right; width:70px; " class="typ">{{prod.price.toFixed(3)}} TND</td>
             </tr>
           </tbody>
         </table>
@@ -300,16 +299,16 @@
             <tr>
               <td colspan="2" style="text-align:left; font-weight:bold; padding-top:5px;">Grand Total</td>
               <td colspan="2"
-                style="border-top:1px dashed #000; padding-top:5px; text-align:right; font-weight:bold;">{{total}}
+                style="border-top:1px dashed #000; padding-top:5px; text-align:right; font-weight:bold;">{{netTotal.toFixed(3)}}
                 TND.</td>
             </tr>
             <tr>
               <td colspan="2" style="text-align:left; font-weight:bold; padding-top:5px;">Payé</td>
-              <td colspan="2" style="padding-top:5px; text-align:right; font-weight:bold;">200.0 TND.</td>
+              <td colspan="2" style="padding-top:5px; text-align:right; font-weight:bold;">{{netTotal.toFixed(3)}} TND.</td>
             </tr>
             <tr>
               <td colspan="2" style="text-align:left; font-weight:bold; padding-top:5px;">Reste</td>
-              <td colspan="2" style="padding-top:5px; text-align:right; font-weight:bold;">0.0 TND.</td>
+              <td colspan="2" style="padding-top:5px; text-align:right; font-weight:bold;">0.000 TND.</td>
             </tr>
           </tbody>
         </table>

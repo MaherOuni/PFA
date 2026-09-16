@@ -1,14 +1,18 @@
-<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8"></div>
-<div class="container-fluid">
+<div class="page-container container-fluid">
+  <div class="page-head">
+    <div>
+      <h1 class="page-head-title">Categories</h1>
+      <p class="page-head-sub">Familles de produits du catalogue</p>
+    </div>
+  </div>
   <div class="card maincard">
     <div class="card-head">
-      <h3 class="col-md-3">Categories</h3>
-      <div class="col-md-6 row">
+      <div class="col-md-8 row">
         <input
           placeholder="Chercher une catégorie par nom ou reference"
           type="text"
-          class="form-control-alternative text-center form-control col-md-11"
-          style="margin-right: 5px; max-height: 30px"
+          class="form-control-alternative form-control col-md-11"
+          style="margin-right: 8px"
           (change)="search = $event.target.value"
         />
         <button
@@ -20,7 +24,7 @@
           <i class="fas fa-search"></i>
         </button>
       </div>
-      <div class="col-md-3" style="text-align: end">
+      <div class="col-md-4" style="text-align: end">
         <div class="col-md-3" style="display: contents" ngbDropdown>
           <a class="btn btn-info btn-sm" ngbDropdownToggle>
             <span class="btn-inner--icon"
@@ -179,19 +183,19 @@
             >
           </div>
         </div>
-        <h3>Reference:</h3>
+        <label class="form-control-label">Reference</label>
         <input
           placeholder="numero de reference"
           type="number"
-          class="form-control-alternative text-center form-control col-md-12"
+          class="form-control-alternative form-control col-md-12"
           style="margin-bottom: 12px"
           (change)="newCategory.id = $event.target.value"
         />
-        <h3>Nom du catégorie:</h3>
+        <label class="form-control-label">Nom du catégorie</label>
         <input
           placeholder="Nom du catégorie"
           type="text"
-          class="form-control-alternative text-center form-control col-md-12"
+          class="form-control-alternative form-control col-md-12"
           style="margin-bottom: 12px"
           (change)="newCategory.name = $event.target.value"
         />
@@ -235,22 +239,22 @@
           <label class="custom-file-label" for="customFileLang">Upload an image</label>
           </div>
         </div>
-        <h3>Reference:</h3>
+        <label class="form-control-label">Reference</label>
         <input
           placeholder="numero de reference"
           type="number"
           [value]="editCategory.id"
-          class="form-control-alternative text-center form-control col-md-12"
+          class="form-control-alternative form-control col-md-12"
           style="margin-bottom: 12px"
           (change)="editingCategory.id = $event.target.value"
 
         />
-      <h3>Nom de la catégorie</h3>
+      <label class="form-control-label">Nom de la catégorie</label>
       <input
         placeholder="Nom de la catégorie"
         type="text"
         [value]="editCategory.name"
-        class="form-control-alternative text-center form-control col-md-12"
+        class="form-control-alternative form-control col-md-12"
         style="margin-bottom: 12px"
         (change)="editingCategory.name = $event.target.value"
 

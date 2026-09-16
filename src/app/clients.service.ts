@@ -1,26 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from '../environments/environment';
+import { DemoService } from './demo/demo.service';
+import { DemoStoreService } from './demo/demo-store.service';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ClientsService {
   header: HttpHeaders;
-  constructor(public http : HttpClient) { }
 
-  getAllClients(): Observable<any>
-  {
-    // Demo mode: read the bundled fixture instead of the backend. It is served
-    // from the build output, so this stays a normal HTTP GET and callers do
-    // not need to change.
-    if (environment.demoMode) {
-      return this.http.get('assets/mock/clients.json');
+  constructor(public http: HttpClient,
+              private demo: DemoService,
+              private store: DemoStoreService) { }
+
+  getAllClients(): Observable<any> {
+    // Demo mode: serve the in-memory catalogue rather than the backend. It
+    // comes from the store instead of a static JSON file so that a client
+    // added on this page is still there after a reload.
+    if (this.demo.active) {
+      return of(this.store.clients);
     }
 
-    let url = `${environment.apiUrl}/rest/client/all`;
+    const url = `${environment.apiUrl}/rest/client/all`;
     this.header = new HttpHeaders();
-    this.header.append("Content-Type", "application/json");
+    this.header.append('Content-Type', 'application/json');
     return this.http.get(url, {headers: this.header});
   }
 }

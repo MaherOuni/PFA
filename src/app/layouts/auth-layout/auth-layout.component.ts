@@ -15,8 +15,8 @@ export class AuthLayoutComponent implements OnInit, OnDestroy {
   ngOnInit() {
     var html = document.getElementsByTagName("html")[0];
     html.classList.add("auth-layout");
-    var body = document.getElementsByTagName("body")[0];
-    body.classList.add("bg-default");
+    // The login screen paints its own light background (.auth-shell), so the
+    // old dark `bg-default` body class would only show as a rim around it.
     this.router.events.subscribe((event) => {
       this.isCollapsed = true;
    });
@@ -25,7 +25,5 @@ export class AuthLayoutComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     var html = document.getElementsByTagName("html")[0];
     html.classList.remove("auth-layout");
-    var body = document.getElementsByTagName("body")[0];
-    body.classList.remove("bg-default");
   }
 }

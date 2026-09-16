@@ -1,0 +1,28 @@
+<div class="demo-badge" *ngIf="demo.active" ngbDropdown placement="bottom-right">
+  <button type="button" class="demo-pill" ngbDropdownToggle>
+    <span class="demo-dot" aria-hidden="true"></span>
+    <span class="demo-label">Mode demo</span>
+  </button>
+
+  <div ngbDropdownMenu class="dropdown-menu-right demo-menu">
+    <div class="demo-menu-head">
+      <strong>Donnees de demonstration</strong>
+      <p>
+        Le catalogue, les ventes et les clients sont fictifs. Vos modifications
+        sont gardees dans ce navigateur uniquement.
+      </p>
+    </div>
+
+    <div class="dropdown-divider"></div>
+
+    <a class="dropdown-item" (click)="reset()">
+      <i class="fas fa-undo"></i>
+      <span>Reinitialiser les donnees</span>
+    </a>
+
+    <a class="dropdown-item" *ngIf="!demo.forced" (click)="exit()">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Quitter la demo</span>
+    </a>
+  </div>
+</div>

@@ -3,17 +3,17 @@ import { CommonModule, } from '@angular/common';
 import { BrowserModule  } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 
-import { environment } from '../environments/environment';
-
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 
 const routes: Routes =[
   {
     path: '',
-    // Demo mode has no backend to authenticate against, so skip the login
-    // screen entirely. The login page itself is still routable at /login.
-    redirectTo: environment.demoMode ? 'dashboard' : 'login',
+    // Always land on the login screen. Demo mode can be switched on at
+    // runtime (a ?demo=1 link, or the button on the login form), so this
+    // redirect cannot be decided here at module-load time; LoginComponent
+    // forwards to the dashboard when the demo is already active.
+    redirectTo: 'login',
     pathMatch: 'full',
   }, {
     path: '',

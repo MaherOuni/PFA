@@ -12,7 +12,7 @@ and serves the contents of `dist/`.
 | `package.json` | `build:prod` script + `engines.node` pinned to `20.x` |
 | `src/environments/environment*.ts` | `apiUrl` and `demoMode` used by the HTTP services |
 | `scripts/set-env.js` | Generates `environment.prod.ts` from `DEMO_MODE` / `API_URL` at build time |
-| `src/assets/mock/*.json` | Fixture data used when `DEMO_MODE=true` |
+| `src/app/demo/` | Demo mode: the seed catalogue, the store the pages read, and the mode toggle |
 
 ## Deploy
 
@@ -33,41 +33,79 @@ vercel --prod # production deployment
 
 ## Demo mode (no backend)
 
-Set `DEMO_MODE=true` in Vercel -> Settings -> Environment Variables to deploy a
-working demo with no backend at all. In that mode:
+Demo mode runs the whole app with no backend at all: authentication is bypassed
+and every page reads from a seeded catalogue held in the browser. There are
+three ways in, checked in this order.
 
-- the login screen is skipped (`/` redirects straight to the dashboard) and the
-  admin layout accepts a placeholder token instead of bouncing to `/login`;
-- `AuthenticationService.authenticate()` accepts any credentials, so `/login`
-  still works if you navigate to it;
-- `ClientsService` and `UsersService` read `src/assets/mock/*.json` instead of
-  calling the backend.
+| How | When to use it | Can the visitor leave? |
+| --- | --- | --- |
+| `DEMO_MODE=true` at build time | A permanently-demo deployment | No — the UI hides the exit |
+| `#/dashboard?demo=1` in the URL | A link you send someone | Yes |
+| **Explorer la demo** on the login screen | A visitor who lands on the real app | Yes |
 
-None of the real authentication code is removed - every branch above is guarded
-by `environment.demoMode`, so clearing the variable restores normal behaviour.
+The last two persist the choice in `localStorage`, so a reload stays in the
+demo. A deployment pointed at a real backend therefore stays out of demo mode
+unless someone explicitly asks for it.
 
-Angular bakes environment files in at build time, so the variable is read during
+Put `demo=1` after the `#`, not before it. Angular routes with `useHash`, and
+its first navigation rewrites the address to a hash-only URL — anything in the
+query string before the `#` is dropped. `DemoService` reads the URL at module
+load to catch that form anyway, but only the hash form survives to be shared on
+from inside the app.
+
+### What demo mode changes
+
+- `AuthenticationService.authenticate()` accepts any credentials and returns a
+  placeholder token, and the admin layout accepts that token instead of
+  bouncing to `/login`.
+- `AuthInterceptorService` stops attaching an `Authorization` header, since
+  there is nothing to authorise against.
+- `DemoStoreService` writes the catalogue to `localStorage` after every change,
+  so a product added on the Produits page is still there after a reload and is
+  visible from the POS.
+- A **Mode demo** badge appears in the top bar, with **Reinitialiser les
+  donnees** (re-seed, discarding the visit's edits) and **Quitter la demo**
+  (leave and return to the real login screen).
+
+None of the real authentication code is removed — every branch above is guarded
+by `DemoService.active`, so turning demo mode off restores normal behaviour.
+
+### The demo data
+
+Everything lives in `src/app/demo/`:
+
+| File | Holds |
+| --- | --- |
+| `demo-seed.ts` | The seed catalogue: products, categories, clients, providers, deposits, staff, and a generated year of sales |
+| `demo-store.service.ts` | The live collections the pages read and write, plus the figures the dashboard charts |
+| `demo.service.ts` | Whether demo mode is on, and reset / exit |
+
+Sales are generated rather than typed out, from a fixed seed: the dates stay
+current without anyone editing them, and every visitor sees the same numbers.
+
+To extend the demo, edit `demo-seed.ts`. Note that a product's `category` must
+match an icon filename under `src/assets/img/icons/common/<Category>.png` — the
+product table builds that path from the category string, so an accented
+`Plâtrerie` would 404.
+
+The list pages no longer carry their own hardcoded arrays; they all read
+`DemoStoreService`. Outside demo mode that store stays in memory for the
+session, which is how those pages behaved before — none of these entities has a
+backend endpoint yet. Only **Clients** and **Personnel** fetch over HTTP, via
+`ClientsService` and `UsersService`, and those two return the store's rows in
+demo mode.
+
+### Build-time configuration
+
+Angular bakes environment files in at build time, so `DEMO_MODE` is read during
 the build by `scripts/set-env.js`, which regenerates
 `src/environments/environment.prod.ts`. It runs automatically as the
-`prebuild:prod` npm hook - no change to the build command is needed. The same
+`prebuild:prod` npm hook — no change to the build command is needed. The same
 script also reads `API_URL`, which is the easiest way to point a real
 deployment at a backend without editing code.
 
 With neither variable set the generated file is identical to the one committed,
 so local builds leave the working tree clean.
-
-### Adding more mock data
-
-Only two pages fetch over HTTP: **Clients** and **Personnels**. Every other page
-(products, categories, sales, deposits, providers, POS) already renders
-hardcoded arrays inside its component, so it works with or without a backend.
-To extend the demo data, edit `src/assets/mock/clients.json` or
-`src/assets/mock/users.json`.
-
-Note that `stuff.component.ts` fetches users but still renders its own
-hardcoded `Stuffs` array - the fetched JSON is only logged. That is pre-existing
-behaviour, left as-is; wire `Stuffs` to the response if you want the mock file
-to drive that table.
 
 ## Connecting the backend (required outside demo mode)
 

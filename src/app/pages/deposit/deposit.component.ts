@@ -1,177 +1,162 @@
-import { Component, OnInit } from '@angular/core';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
+import { DemoService } from '../../demo/demo.service';
+import { DemoStoreService } from '../../demo/demo-store.service';
+
+const PAGE_SIZE = 6;
+
 @Component({
   selector: 'app-deposit',
   templateUrl: './deposit.component.html',
   styleUrls: ['./deposit.component.css']
 })
-export class DepositComponent implements OnInit {
+export class DepositComponent implements OnInit, OnDestroy {
 
   index;
   pages = 0;
   page = 0;
-  mod = 0;
-  newDeposit = {
-    id: '',
-    name:'',
-    capacity: 0,
-    used:0
-  }
+  newDeposit = this.blankDeposit();
   search = '';
-  staticDeposits:any;
+  staticDeposits: any[] = [];
   closeResult: string;
   editDeposit: any = null;
   deleteDeposit: any = null;
   inspectDeposit: any = null;
-  inspectSale:any=null;
-  editingDeposit:any;
+  inspectSale: any = null;
+  editingDeposit: any;
 
-  Deposits = [
-    {
-      id: '18328290',
-    name: 'Dépot 1',
-    capacity: 550,
-    used:200
-    },
-    {
-      id: '22328290',
-      name: 'Dépot 2',
-    capacity: 420,
-    used: 200
-    },
-    {
-      id: '88328291',
-      name: 'Dépot 3',
-    capacity: 330,
-    used:250
-    },
-    {
-      id: '18328291',
-      name: 'Dépot 4',
-    capacity: 600,
-    used: 100
-    },
-    {
-      id: '223287592',
-      name: 'Dépot 5',
-    capacity: 170,
-    used:90
-    },
-    {
-      id: '88326451',
-      name: 'Dépot 6',
-    capacity: 280,
-    used:120
-    },
+  Deposits: any[] = [];
 
+  /** Stock held in the deposit being inspected. */
+  Products: any[] = [];
 
+  prodligne: Array<any> = [
+    { name: 'Ciment gris CEM II', price: 12.500, qte: 40 },
+    { name: 'Tube multicouche',   price: 118.000, qte: 6 },
+    { name: 'Cable electrique 2.5 mm2', price: 96.000, qte: 12 },
+    { name: 'Escabeau aluminium', price: 129.000, qte: 3 },
   ];
 
-  Products = [
-    {
-      ref: '78328290',
-      name: 'Ciment',
-      img: '514ofwJ1JVL._AC_SY355_.jpg',
-      price: 35.000,
-      supplier: 'Fournisseur1',
-      qtestock: 65,
+  private sub = new Subscription();
 
-    },
-    {
-      ref: '78328291',
-      name: 'Fil barbelé',
-      img: 'ae235.jpg',
-      price: 12.300,
-      supplier: 'Fournisseur1',
-      qtestock: 40,
-    },
-    {
-      ref: '78328292',
-      name: 'Clou',
-      img: '61tYal6UQ9L._AC_SL1360_.jpg',
-      price: 0.300,
-      supplier: 'Fournisseur3',
-      qtestock: 12,
-    },
-  ];
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal,
+              private store: DemoStoreService,
+              private demo: DemoService) { }
 
   ngOnInit(): void {
+    this.reload();
+    this.sub.add(this.demo.resets$.subscribe(() => this.reload()));
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+
+  private reload(): void {
+    this.Deposits = this.store.deposits;
+    this.Products = this.store.products;
     this.staticDeposits = this.Deposits;
-    this.Deposits.length % 6 ? this.mod = 1 : this.mod = 0;
-    this.pages = (Math.floor(this.Deposits.length / 6)) + this.mod;
+    this.newDeposit = this.blankDeposit();
+    this.page = 0;
+    this.recount();
   }
-  filterNameAsc() {
 
-    this.Deposits = this.Deposits.sort((a, b) => (a.name > b.name) ? 1 : -1);
+  private blankDeposit() {
+    return { id: '', name: '', capacity: 0, used: 0 };
   }
-  filterNameDesc() {
 
-    this.Deposits = this.Deposits.sort((a, b) => (a.name < b.name) ? 1 : -1);
-  }
-  open(content, type, modalDimension) {
-    if ( type !== 'Notification') {
-    this.modalService.open(content, { windowClass: 'modal-mini', size: 'sm', centered: true }).result.then((result) => {
-        this.closeResult = 'Closed with: $result';
-    }, (reason) => {
-        this.closeResult = 'Dismissed $this.getDismissReason(reason)';
-    }); } else {
-      this.modalService.open(content, { windowClass: 'modal-danger', centered: true }).result.then((result) => {
-        this.closeResult = 'Closed with: $result';
-    }, (reason) => {
-        this.closeResult = 'Dismissed $this.getDismissReason(reason)';
-    });
+  private recount(): void {
+    this.pages = Math.ceil(this.Deposits.length / PAGE_SIZE);
+    if (this.page >= this.pages) {
+      this.page = Math.max(0, this.pages - 1);
     }
-
-}
-open2(content, type, modalDimension){
-  this.modalService.open(content, { windowClass: 'modal', size: 'lg', centered: true }).result.then((result) => {
-    this.closeResult = 'Closed with: $result';
-}, (reason) => {
-    this.closeResult = 'Dismissed $this.getDismissReason(reason)';
-});
-}
-applySearch() {
-  this.Deposits = this.staticDeposits;
-   this.Deposits = this.Deposits.filter((p) => {
-      return p.name.toUpperCase().includes(this.search.toUpperCase());
-    });
   }
+
+  private commit(): void {
+    this.store.commit('deposits', this.staticDeposits);
+  }
+
+  /**
+   * Narrows the inspected stock list to the deposit that was opened, instead
+   * of showing the whole catalogue under every deposit.
+   */
+  inspectDepositRow(deposit: any): void {
+    this.inspectDeposit = deposit;
+    this.Products = this.store.products.filter(p => p.deposit === deposit.name);
+  }
+
+  filterNameAsc() {
+    this.Deposits = [...this.Deposits].sort((a, b) => (a.name > b.name) ? 1 : -1);
+  }
+
+  filterNameDesc() {
+    this.Deposits = [...this.Deposits].sort((a, b) => (a.name < b.name) ? 1 : -1);
+  }
+
+  open(content, type, modalDimension) {
+    if (type !== 'Notification') {
+      // These forms run to eight fields. 'sm' with no scrolling clipped the
+      // lower half of the dialog on short viewports and left the Enregistrer
+      // button unreachable.
+      this.modalService.open(content, { size: 'md', centered: true, scrollable: true })
+        .result.then(() => { this.closeResult = 'Closed'; },
+                     () => { this.closeResult = 'Dismissed'; });
+    } else {
+      this.modalService.open(content, { windowClass: 'modal-danger', centered: true })
+        .result.then(() => { this.closeResult = 'Closed'; },
+                     () => { this.closeResult = 'Dismissed'; });
+    }
+  }
+
+  open2(content, type, modalDimension) {
+    this.modalService.open(content, { windowClass: 'modal', size: 'lg', centered: true })
+      .result.then(() => { this.closeResult = 'Closed'; },
+                   () => { this.closeResult = 'Dismissed'; });
+  }
+
+  applySearch() {
+    const needle = this.search.toUpperCase();
+    this.Deposits = this.staticDeposits.filter(d => d.name.toUpperCase().includes(needle));
+    this.page = 0;
+    this.recount();
+  }
+
   pagingForward() {
     if (this.page + 1 < this.pages) {
-    this.page += 1;
+      this.page += 1;
     }
   }
-  pagingBackward() {
-  if (this.page >= 1) {
-    this.page -= 1;
-  }
-  }
-  DepositDelete() {
-    this.staticDeposits =  this.staticDeposits.filter((p) => {
-       return   p.id != this.deleteDeposit.id;
-      });
-      this.Deposits =  this.Deposits.filter((p) => {
-        return   p.id != this.deleteDeposit.id;
-       });
-    }
-    saveedit() {
-      this.Deposits[this.index] = this.editingDeposit;
-    }
-    savenew(){
-      let dep = {
-        id: '',
-        name: '',
-        capacity: 0 ,
-        used:0
-      }
-      dep.name = this.newDeposit.name
-      dep.id = this.newDeposit.id
-      dep.capacity = this.newDeposit.capacity
-      dep.used = this.newDeposit.used
 
-    this.Deposits.push(dep);
-    this.Deposits.length % 6 ? this.mod = 1 : this.mod = 0;
-    this.pages = (Math.floor(this.Deposits.length / 6)) + this.mod;
+  pagingBackward() {
+    if (this.page >= 1) {
+      this.page -= 1;
     }
+  }
+
+  DepositDelete() {
+    this.staticDeposits = this.staticDeposits.filter(d => d.id !== this.deleteDeposit.id);
+    this.Deposits = this.Deposits.filter(d => d.id !== this.deleteDeposit.id);
+    this.recount();
+    this.commit();
+  }
+
+  saveedit() {
+    this.editDeposit = this.editingDeposit;
+    this.commit();
+  }
+
+  savenew() {
+    const dep = { ...this.newDeposit };
+    dep.id = dep.id || `DEP-${Date.now().toString().slice(-6)}`;
+    dep.capacity = Number(dep.capacity) || 0;
+    dep.used = Number(dep.used) || 0;
+
+    this.staticDeposits.push(dep);
+    this.Deposits = this.staticDeposits;
+    this.recount();
+    this.commit();
+
+    this.newDeposit = this.blankDeposit();
+  }
 }

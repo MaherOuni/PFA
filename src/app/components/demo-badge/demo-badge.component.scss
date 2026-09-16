@@ -1,0 +1,71 @@
+:host { display: inline-block; }
+
+.demo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3125rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--brand-700);
+  background: var(--brand-50);
+  border: 1px solid var(--brand-200);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background-color var(--speed) var(--ease),
+              border-color var(--speed) var(--ease);
+
+  &:hover {
+    background: var(--brand-100);
+    border-color: var(--brand-300);
+  }
+
+  // ngbDropdownToggle draws a caret; the pill already reads as a menu.
+  &::after { display: none !important; }
+}
+
+.demo-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand-500);
+  // A slow pulse marks the state as live without being distracting. Users who
+  // asked for reduced motion get a static dot via the global rule in _tokens.
+  animation: demo-pulse 2.4s var(--ease) infinite;
+}
+
+@keyframes demo-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.45; transform: scale(0.82); }
+}
+
+.demo-menu {
+  width: 290px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.demo-menu-head {
+  padding: 0.875rem 1rem;
+  background: var(--brand-50);
+
+  strong {
+    display: block;
+    font-size: 0.8125rem;
+    color: var(--brand-700);
+  }
+
+  p {
+    margin: 0.25rem 0 0;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    color: var(--ink-600);
+  }
+}
+
+.demo-menu .dropdown-divider { margin: 0; }
+
+.demo-menu .dropdown-item {
+  margin: 0.25rem;
+  width: calc(100% - 0.5rem);
+}

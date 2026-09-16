@@ -1,0 +1,96 @@
+// =============================================================================
+// Design tokens
+// =============================================================================
+//
+// The single source of truth for the modern LABORHELM look. Everything below
+// is a CSS custom property so a value can be overridden per-component (or at
+// runtime) without recompiling, and so the Argon defaults we are layering over
+// can be re-pointed at one place instead of being chased through partials.
+//
+// The brand ramp is anchored on the original tan (#D2B48C, now --brand-300).
+// The darker steps exist because that tan only reaches a 1.8:1 contrast ratio
+// against white, which is unusable for buttons and links; --brand-600 clears
+// 4.5:1 and is what interactive elements actually use.
+
+:root {
+  // --- Brand ------------------------------------------------------------
+  --brand-50:  #fbf6ef;
+  --brand-100: #f5e9d7;
+  --brand-200: #ead3af;
+  --brand-300: #d2b48c;
+  --brand-400: #cb9a4f;
+  --brand-500: #b37f33;
+  --brand-600: #96682a;
+  --brand-700: #77521f;
+
+  // --- Ink: text and the dark slate carried over from the old theme -----
+  --ink-900: #1c2222;
+  --ink-800: #2c3434;
+  --ink-700: #464f4f;
+  --ink-600: #5b6666;
+  --ink-500: #6b7676;
+  --ink-400: #8b9595;
+  --ink-300: #b4bcbc;
+
+  // --- Surfaces ---------------------------------------------------------
+  --surface:        #ffffff;
+  --surface-sunken: #f6f7f8;
+  --surface-raised: #ffffff;
+  --canvas:         #f4f5f6;
+  --border:         #e6e9ea;
+  --border-strong:  #d5dadb;
+
+  // --- Status -----------------------------------------------------------
+  --success: #10b981;
+  --success-soft: #ecfdf5;
+  --warning: #f59e0b;
+  --warning-soft: #fffbeb;
+  --danger:  #ef4444;
+  --danger-soft:  #fef2f2;
+  --info:    #3b82f6;
+  --info-soft:    #eff6ff;
+
+  // --- Radii ------------------------------------------------------------
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-pill: 999px;
+
+  // --- Elevation --------------------------------------------------------
+  // Two-part shadows: a tight contact shadow plus a wide soft one. Flat,
+  // neutral and low-opacity, rather than the single heavy blur Argon uses.
+  --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.04);
+  --shadow-md: 0 2px 4px rgba(16, 24, 40, 0.04), 0 8px 20px -8px rgba(16, 24, 40, 0.14);
+  --shadow-lg: 0 4px 8px rgba(16, 24, 40, 0.04), 0 18px 40px -16px rgba(16, 24, 40, 0.20);
+  --shadow-focus: 0 0 0 3px rgba(179, 127, 51, 0.18);
+
+  // --- Type -------------------------------------------------------------
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-brand: 'Dela Gothic One', var(--font-ui);
+  // Tabular figures keep price and quantity columns from shifting as rows
+  // re-sort, which is the whole point of them in a stock table.
+  --font-numeric: 'Inter', ui-monospace, 'Segoe UI', sans-serif;
+
+  // --- Motion -----------------------------------------------------------
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --speed: 160ms;
+
+  // --- Shell geometry ---------------------------------------------------
+  --sidebar-width: 250px;
+}
+
+// Anyone who asked not to see motion gets none of the hover lifts, the modal
+// slide, or the sidebar transitions.
+@media (prefers-reduced-motion: reduce) {
+  :root { --speed: 0ms; }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

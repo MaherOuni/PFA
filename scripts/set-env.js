@@ -7,8 +7,9 @@
  * `npm run build:prod` both locally and on Vercel.
  *
  * Recognised variables (set these in Vercel -> Settings -> Environment Variables):
- *   DEMO_MODE  'true' to run without a backend: auth is bypassed and the
- *              services read from src/assets/mock/*.json. Default: false.
+ *   DEMO_MODE  'true' to run without a backend: auth is bypassed and every
+ *              page reads the seeded catalogue in src/app/demo.
+ *              Default: false.
  *   API_URL    Origin of the backend, e.g. 'https://api.example.com'.
  *              Empty keeps requests relative. Default: ''.
  *
@@ -31,8 +32,11 @@ const contents = `// GENERATED FILE - do not edit by hand.
 // Change the DEMO_MODE / API_URL environment variables instead.
 export const environment = {
   production: true,
-  // When true the app runs with no backend: authentication is bypassed and the
-  // services resolve to src/assets/mock/*.json instead of HTTP endpoints.
+  // Forces demo mode on: the app runs with no backend, authentication is
+  // bypassed and every page reads the seeded catalogue in src/app/demo.
+  // Demo mode can also be switched on at runtime (a ?demo=1 link, or the
+  // button on the login screen); this flag makes it permanent and hides the
+  // exit. See DEPLOY.md.
   demoMode: ${demoMode},
   // Base URL of the backend API. Empty keeps requests relative.
   apiUrl: '${apiUrl}'

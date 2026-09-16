@@ -1,48 +1,72 @@
-<div class="header bg-gradient-danger py-7 py-lg-8">
+<div class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <img src="assets/img/brand/helmet.svg" alt="" />
+      <span>LABORHELM</span>
+    </div>
 
-  <div class="separator separator-bottom separator-skew zindex-100">
-    <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
-      <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-    </svg>
-  </div>
-</div>
-<!-- Page content -->
-<div class="container mt--8 pb-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-5 col-md-7">
-      <div class="card bg-secondary shadow border-0">
+    <h1 class="auth-title">Connexion</h1>
+    <p class="auth-sub">Gestion de stock et point de vente</p>
 
-        <div class="card-body px-lg-5 py-lg-5">
-          <div class="text-center text-muted mb-4">
-            <Strong>Authentification</Strong>
+    <form role="form" (ngSubmit)="authenticate()">
+      <div class="form-group mb-3">
+        <label class="form-control-label" for="login-user">Nom d'utilisateur</label>
+        <div class="input-group input-group-alternative">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
           </div>
-          <form role="form">
-            <div class="form-group mb-3">
-              <div class="input-group input-group-alternative">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
-                </div>
-                <input class="form-control" placeholder="Nom d'utilisateur" [(ngModel)]="login" [ngModelOptions]="{standalone: true}" type="text">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="input-group input-group-alternative">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
-                </div>
-                <input class="form-control" placeholder="Mot de passe" [(ngModel)]="password" [ngModelOptions]="{standalone: true}"  type="password">
-              </div>
-            </div>
-
-            <div class="text-center">
-              <button type="button" class="btn btn-primary my-4" (click)="authenticate()">S'authentifier</button>
-              <h5 style="color: #f5365c ;" *ngIf="error">{{this.error}}</h5>
-            </div>
-          </form>
+          <input
+            id="login-user"
+            class="form-control"
+            placeholder="Nom d'utilisateur"
+            autocomplete="username"
+            [(ngModel)]="login"
+            [ngModelOptions]="{standalone: true}"
+            type="text"
+          />
         </div>
       </div>
 
-    </div>
+      <div class="form-group mb-4">
+        <label class="form-control-label" for="login-pass">Mot de passe</label>
+        <div class="input-group input-group-alternative">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+          </div>
+          <input
+            id="login-pass"
+            class="form-control"
+            placeholder="Mot de passe"
+            autocomplete="current-password"
+            [(ngModel)]="password"
+            [ngModelOptions]="{standalone: true}"
+            type="password"
+          />
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg btn-block">
+        Se connecter
+      </button>
+
+      <p class="auth-error" *ngIf="error">{{ error }}</p>
+    </form>
+
+    <!--
+      Demo entry point. Hidden when DEMO_MODE is baked in, because that build
+      routes straight past this screen anyway.
+    -->
+    <ng-container *ngIf="!demo.forced">
+      <div class="auth-divider">ou</div>
+
+      <button type="button" class="btn btn-secondary btn-lg btn-block" (click)="startDemo()">
+        <i class="fas fa-play mr-2"></i>
+        Explorer la demo
+      </button>
+
+      <p class="auth-hint">
+        Aucun compte requis. Donnees fictives, gardees dans ce navigateur.
+      </p>
+    </ng-container>
   </div>
 </div>
-

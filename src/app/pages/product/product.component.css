@@ -1,22 +1,7 @@
-.container-fluid {
-  position: relative;
-  top: -15vh;
-}
-.maincard {
-  box-shadow: 5px 5px 20px #464f4f3a;
-}
-.prodimg {
-  height: 50px;
-  width: 50px;
-}
-
-.card-head {
-  padding: 1rem;
-  display: flex;
-}
-td{
-  font-family: 'Epilogue', sans-serif;
-}
+/*
+ * Page-specific tweaks only. The shared look for this page - the card,
+ * table, toolbar and thumbnails - lives in assets/scss/theme.
+ */
 .custom-file{
   max-height: 50px;
 }
@@ -35,3 +20,22 @@ td{
   width: fit-content;
 }
 
+/* Category cell: a compact chip rather than a full-size thumbnail. */
+.cat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.caticon {
+  height: 22px;
+  width: 22px;
+  object-fit: contain;
+}
+
+.price-cell {
+  color: var(--ink-900);
+  font-weight: 600;
+  white-space: nowrap;
+}

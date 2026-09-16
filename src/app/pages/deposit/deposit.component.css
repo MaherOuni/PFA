@@ -1,23 +1,7 @@
-.container-fluid{
-  position: relative;
-  top:-15vh;
-}
-.maincard {
-  box-shadow: 5px 5px 20px #464f4f3a;
-}
-.prodimg{
-
-  height: 50px;
-  width: 50px;
-}
-
-.card-head{
-  padding: 1rem;
-  display: flex;
-}
-td{
-  font-family: 'Epilogue', sans-serif;
-}
+/*
+ * Page-specific tweaks only. The shared look for this page - the card,
+ * table, toolbar and thumbnails - lives in assets/scss/theme.
+ */
 #content .typ {
   color: rgb(31, 31, 31);
   font-size: 15px;
@@ -34,4 +18,15 @@ td{
   font-size: 20px;
   font-weight: 500;
   color: rgb(48, 48, 48);
+}
+
+/* Occupancy cell: the figure on its own line with the bar under it, capped
+   so the bar does not stretch the full column width and read as a rule. */
+.usage-value {
+  display: block;
+  margin-bottom: 4px;
+}
+
+td .progress {
+  max-width: 120px;
 }

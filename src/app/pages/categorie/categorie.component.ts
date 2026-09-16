@@ -1,156 +1,144 @@
-import { Component, OnInit } from '@angular/core';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
+import { DemoService } from '../../demo/demo.service';
+import { DemoStoreService } from '../../demo/demo-store.service';
+
+const PAGE_SIZE = 5;
+
 @Component({
   selector: 'app-categorie',
   templateUrl: './categorie.component.html',
   styleUrls: ['./categorie.component.css'],
 })
-export class CategorieComponent implements OnInit {
+export class CategorieComponent implements OnInit, OnDestroy {
   index;
   pages = 0;
   page = 0;
-  mod = 0;
-  newCategory = {
-    id: '',
-    name: '',
-    img: '',
-  }
+  newCategory = { id: '', name: '', img: '' };
   search = '';
-  staticCategories:any;
+  staticCategories: any[] = [];
   catimg = 'picture.svg';
   editcatimg = '';
   closeResult: string;
   editCategory: any = null;
   deleteCategory: any = null;
   inspectCategory: any = null;
-  editingCategory:any;
-  Categories = [
-    {
-      id: '18328290',
-      name: 'Electronique',
-      img: 'Electronique.png',
-    },
-    {
-      id: '22328290',
-      name: 'Plomberie',
-      img: 'Plomberie.png',
-    },
-    {
-      id: '88328291',
-      name: 'Climatisation',
-      img: 'Climatisation.png',
-    },
+  editingCategory: any;
 
-    {
-      id: '58328290',
-      name: 'Peinture',
-      img: 'Peinture.png',
-    },
-    {
-      id: '08328290',
-      name: 'Maconnerie',
-      img: 'Maconnerie.png',
-    },
-    {
-      id: '08328290',
-      name: 'Mecanique',
-      img: 'Mecanique.png',
-    },
-    {
-      id: '08328290',
-      name: 'Plâtrerie',
-      img: 'Platrerie.png',
-    },
-    {
-      id: '08328290',
-      name: 'Domestique',
-      img: 'Domestique.png',
-    },
-  ];
-  constructor(private modalService: NgbModal) {}
+  // Shared with the product form and the POS filter chips, so a category
+  // added here is immediately pickable elsewhere.
+  Categories: any[] = [];
+
+  private sub = new Subscription();
+
+  constructor(private modalService: NgbModal,
+              private store: DemoStoreService,
+              private demo: DemoService) {}
 
   ngOnInit(): void {
-    this.staticCategories = this.Categories;
-    this.Categories.length % 5 ? this.mod = 1 : this.mod = 0;
-    this.pages = (Math.floor(this.Categories.length / 5)) + this.mod;
+    this.reload();
+    this.sub.add(this.demo.resets$.subscribe(() => this.reload()));
   }
 
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+
+  private reload(): void {
+    this.Categories = this.store.categories;
+    this.staticCategories = this.Categories;
+    this.newCategory = { id: '', name: '', img: '' };
+    this.page = 0;
+    this.recount();
+  }
+
+  private recount(): void {
+    this.pages = Math.ceil(this.Categories.length / PAGE_SIZE);
+    if (this.page >= this.pages) {
+      this.page = Math.max(0, this.pages - 1);
+    }
+  }
+
+  private commit(): void {
+    this.store.commit('categories', this.staticCategories);
+  }
 
   filterNameAsc() {
-
-    this.Categories = this.Categories.sort((a, b) => (a.name > b.name) ? 1 : -1);
+    this.Categories = [...this.Categories].sort((a, b) => (a.name > b.name) ? 1 : -1);
   }
-  filterNameDesc() {
 
-    this.Categories = this.Categories.sort((a, b) => (a.name < b.name) ? 1 : -1);
+  filterNameDesc() {
+    this.Categories = [...this.Categories].sort((a, b) => (a.name < b.name) ? 1 : -1);
   }
 
   processFile(imageInput: any) {
-
     this.catimg = imageInput.target.files[0].name;
     this.newCategory.img = this.catimg;
-
   }
-  processFile2(imageInput: any) {
 
+  processFile2(imageInput: any) {
     this.editcatimg = imageInput.target.files[0].name;
     this.editingCategory.img = this.editcatimg;
   }
 
   open(content, type, modalDimension) {
-    if ( type !== 'Notification') {
-    this.modalService.open(content, { windowClass: 'modal-mini', size: 'sm', centered: true }).result.then((result) => {
-        this.closeResult = 'Closed with: $result';
-    }, (reason) => {
-        this.closeResult = 'Dismissed $this.getDismissReason(reason)';
-    }); } else {
-      this.modalService.open(content, { windowClass: 'modal-danger', centered: true }).result.then((result) => {
-        this.closeResult = 'Closed with: $result';
-    }, (reason) => {
-        this.closeResult = 'Dismissed $this.getDismissReason(reason)';
-    });
+    if (type !== 'Notification') {
+      // These forms run to eight fields. 'sm' with no scrolling clipped the
+      // lower half of the dialog on short viewports and left the Enregistrer
+      // button unreachable.
+      this.modalService.open(content, { size: 'md', centered: true, scrollable: true })
+        .result.then(() => { this.closeResult = 'Closed'; },
+                     () => { this.closeResult = 'Dismissed'; });
+    } else {
+      this.modalService.open(content, { windowClass: 'modal-danger', centered: true })
+        .result.then(() => { this.closeResult = 'Closed'; },
+                     () => { this.closeResult = 'Dismissed'; });
     }
-
-}
-applySearch() {
-  this.Categories = this.staticCategories;
-   this.Categories = this.Categories.filter((p) => {
-      return p.name.toUpperCase().includes(this.search.toUpperCase()) || p.id.toUpperCase().includes(this.search.toUpperCase());
-    });
   }
+
+  applySearch() {
+    const needle = this.search.toUpperCase();
+    this.Categories = this.staticCategories.filter(c =>
+      c.name.toUpperCase().includes(needle) || c.id.toUpperCase().includes(needle));
+    this.page = 0;
+    this.recount();
+  }
+
   categoryDelete() {
-    this.staticCategories =  this.staticCategories.filter((p) => {
-       return   p.id != this.deleteCategory.id;
-      });
-      this.Categories =  this.Categories.filter((p) => {
-        return   p.id != this.deleteCategory.id;
-       });
-    }
-    saveedit(){
-      this.Categories[this.index] = this.editingCategory;
-      console.log(this.editingCategory);
-    }
-    pagingForward() {
-      if (this.page + 1 < this.pages) {
+    this.staticCategories = this.staticCategories.filter(c => c.id !== this.deleteCategory.id);
+    this.Categories = this.Categories.filter(c => c.id !== this.deleteCategory.id);
+    this.recount();
+    this.commit();
+  }
+
+  saveedit() {
+    this.editCategory = this.editingCategory;
+    this.commit();
+  }
+
+  pagingForward() {
+    if (this.page + 1 < this.pages) {
       this.page += 1;
-      }
     }
-    pagingBackward() {
+  }
+
+  pagingBackward() {
     if (this.page >= 1) {
       this.page -= 1;
     }
-    }
-    savenew(){
-      let cat = {
-        id: '',
-        name: '',
-        img: '',
-      }
-      cat.name = this.newCategory.name
-      cat.id = this.newCategory.id
-      cat.img = this.newCategory.img
-    this.Categories.push(cat);
-    this.Categories.length % 5 ? this.mod = 1 : this.mod = 0;
-    this.pages = (Math.floor(this.Categories.length / 5)) + this.mod;
-    }
+  }
+
+  savenew() {
+    const cat = { ...this.newCategory };
+    cat.img = cat.img || 'picture.svg';
+
+    this.staticCategories.push(cat);
+    this.Categories = this.staticCategories;
+    this.recount();
+    this.commit();
+
+    this.newCategory = { id: '', name: '', img: '' };
+    this.catimg = 'picture.svg';
+  }
 }

@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  // Set to true to develop against the mock JSON data with no backend running.
+  // Set to true to develop against the seeded demo catalogue with no backend
+  // running. Leaving it false still lets you reach the demo from the login
+  // screen, which is usually what you want locally.
   demoMode: false,
   // Empty in development: requests stay relative and are forwarded to
   // http://localhost:8080 by the dev proxy (src/proxy.conf.json).

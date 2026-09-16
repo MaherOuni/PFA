@@ -1,0 +1,540 @@
+// =============================================================================
+// Components: cards, tables, buttons, forms, badges, modals, dropdowns
+// =============================================================================
+
+// --- Cards -------------------------------------------------------------
+.card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  // Argon stacked a heavy blur on every card. A hairline border carries the
+  // separation instead, and elevation is reserved for things that float.
+  box-shadow: var(--shadow-sm);
+}
+
+// Every list page marks its table container with this.
+.maincard {
+  box-shadow: var(--shadow-md) !important;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 1.125rem 1.25rem;
+  background: transparent;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-body { padding: 1.25rem; }
+
+.card-footer {
+  padding: 0.875rem 1.25rem;
+  background: transparent;
+  border-top: 1px solid var(--border);
+}
+
+// The toolbar row at the top of each list page: title, search, actions.
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem !important;
+  border-bottom: 1px solid var(--border);
+
+  h3 {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+}
+
+.card-stats {
+  .card-body { padding: 1.125rem 1.25rem; }
+
+  .card-title {
+    font-size: 0.6875rem !important;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--ink-500) !important;
+  }
+
+  .h2 {
+    font-size: 1.625rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Argon's stat icon is a saturated filled circle. Softening it to a tinted
+  // square keeps four of them in a row from overpowering the numbers, which
+  // are the actual content.
+  .icon-shape {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md) !important;
+    box-shadow: none !important;
+
+    i { font-size: 1.0625rem; }
+
+    &.bg-danger  { background: var(--danger-soft) !important;  color: var(--danger) !important; }
+    &.bg-warning { background: var(--warning-soft) !important; color: var(--warning) !important; }
+    &.bg-info    { background: var(--info-soft) !important;    color: var(--info) !important; }
+    &.bg-success { background: var(--success-soft) !important; color: var(--success) !important; }
+    &.bg-yellow  { background: var(--brand-50) !important;     color: var(--brand-600) !important; }
+  }
+}
+
+// --- Tables ------------------------------------------------------------
+.table {
+  color: var(--ink-700);
+  font-size: 0.875rem;
+
+  thead th {
+    padding: 0.75rem 1rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-500);
+    background: var(--surface-sunken);
+    border-top: 0;
+    border-bottom: 1px solid var(--border) !important;
+    white-space: nowrap;
+  }
+
+  &.thead-light thead th,
+  .thead-light th {
+    background: var(--surface-sunken);
+    color: var(--ink-500);
+  }
+
+  tbody th,
+  tbody td {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    border-top: 1px solid var(--border);
+    // Numbers line up column-wise regardless of digit width.
+    font-variant-numeric: tabular-nums;
+    font-family: var(--font-ui) !important;
+  }
+
+  tbody tr {
+    transition: background-color var(--speed) var(--ease);
+
+    &:hover { background: var(--surface-sunken); }
+  }
+
+  tbody tr:first-child th,
+  tbody tr:first-child td {
+    border-top: 0;
+  }
+}
+
+// The widest table here (Produits) carries nine columns, so the gutters at
+// the edges of the card come from the first and last cell rather than from
+// uniform padding that would push the last column off-screen.
+.table thead th:first-child,
+.table tbody th:first-child,
+.table tbody td:first-child {
+  padding-left: 1.25rem;
+}
+
+.table thead th:last-child,
+.table tbody th:last-child,
+.table tbody td:last-child {
+  padding-right: 1.25rem;
+}
+
+// Product/category thumbnails inside table rows.
+.prodimg {
+  height: 40px !important;
+  width: 40px !important;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+}
+
+// --- Buttons -----------------------------------------------------------
+.btn {
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: 550;
+  letter-spacing: -0.005em;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  transition: background-color var(--speed) var(--ease),
+              border-color var(--speed) var(--ease),
+              color var(--speed) var(--ease),
+              transform var(--speed) var(--ease),
+              box-shadow var(--speed) var(--ease);
+
+  &:hover {
+    // Argon lifted buttons 1px and grew the shadow. Keeping the lift but
+    // dropping the shadow reads as responsive without looking inflated.
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-xs);
+  }
+
+  &:active { transform: translateY(0); }
+
+  &:focus, &.focus { box-shadow: var(--shadow-focus); }
+}
+
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-lg {
+  padding: 0.6875rem 1.25rem;
+  font-size: 0.9375rem;
+  border-radius: var(--radius-md);
+}
+
+.btn-primary {
+  background: var(--brand-600);
+  border-color: var(--brand-600);
+  color: #fff;
+
+  &:hover, &:focus, &:active, &.active {
+    background: var(--brand-700) !important;
+    border-color: var(--brand-700) !important;
+    color: #fff !important;
+  }
+}
+
+// The list pages use btn-info for their toolbar actions (Ajouter, Sort,
+// search). Pointing it at the brand keeps those toolbars on-palette.
+.btn-info {
+  background: var(--brand-600);
+  border-color: var(--brand-600);
+  color: #fff;
+
+  &:hover, &:focus, &:active, &.active {
+    background: var(--brand-700) !important;
+    border-color: var(--brand-700) !important;
+    color: #fff !important;
+  }
+}
+
+.btn-default {
+  background: var(--ink-800);
+  border-color: var(--ink-800);
+  color: #fff;
+
+  &:hover, &:focus, &:active {
+    background: var(--ink-900) !important;
+    border-color: var(--ink-900) !important;
+  }
+}
+
+.btn-secondary,
+.btn-white {
+  background: var(--surface);
+  border-color: var(--border-strong);
+  color: var(--ink-700);
+
+  &:hover, &:focus, &:active {
+    background: var(--surface-sunken) !important;
+    border-color: var(--border-strong) !important;
+    color: var(--ink-900) !important;
+  }
+}
+
+.btn-success {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+
+  &:hover, &:focus, &:active {
+    background: #059669 !important;
+    border-color: #059669 !important;
+  }
+}
+
+.btn-danger {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+
+  &:hover, &:focus, &:active {
+    background: #dc2626 !important;
+    border-color: #dc2626 !important;
+  }
+}
+
+.btn-warning {
+  background: var(--warning);
+  border-color: var(--warning);
+  color: #fff;
+
+  &:hover, &:focus, &:active {
+    background: #d97706 !important;
+    border-color: #d97706 !important;
+  }
+}
+
+.btn-outline-primary {
+  border-color: var(--brand-600);
+  color: var(--brand-600);
+
+  &:hover { background: var(--brand-600); border-color: var(--brand-600); color: #fff; }
+}
+
+.btn-icon-only,
+.btn-round {
+  border-radius: var(--radius-pill) !important;
+}
+
+// --- Forms -------------------------------------------------------------
+.form-control {
+  height: auto;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--ink-800);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  transition: border-color var(--speed) var(--ease),
+              box-shadow var(--speed) var(--ease);
+
+  &::placeholder { color: var(--ink-400); }
+
+  &:focus {
+    background: var(--surface);
+    border-color: var(--brand-400);
+    box-shadow: var(--shadow-focus);
+  }
+}
+
+.form-control-alternative {
+  border: 1px solid var(--border-strong) !important;
+  box-shadow: none !important;
+
+  &:focus {
+    border-color: var(--brand-400) !important;
+    box-shadow: var(--shadow-focus) !important;
+  }
+}
+
+select.form-control {
+  // Native arrow, so the control does not need a background image to look
+  // like a select.
+  appearance: auto;
+}
+
+.form-control-label,
+label {
+  font-size: 0.8125rem;
+  font-weight: 550;
+  color: var(--ink-700);
+}
+
+.input-group {
+  border-radius: var(--radius-md);
+
+  &.input-group-alternative {
+    box-shadow: none;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color var(--speed) var(--ease),
+                box-shadow var(--speed) var(--ease);
+
+    &:focus-within {
+      border-color: var(--brand-400);
+      box-shadow: var(--shadow-focus);
+    }
+
+    .form-control,
+    .input-group-text {
+      border: 0;
+      box-shadow: none !important;
+    }
+  }
+}
+
+.input-group-text {
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-strong);
+  color: var(--ink-500);
+}
+
+// --- Badges ------------------------------------------------------------
+.badge {
+  padding: 0.3125rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  border-radius: var(--radius-pill);
+}
+
+.badge-success { background: var(--success-soft); color: #047857; }
+.badge-danger  { background: var(--danger-soft);  color: #b91c1c; }
+.badge-warning { background: var(--warning-soft); color: #b45309; }
+.badge-info    { background: var(--info-soft);    color: #1d4ed8; }
+.badge-primary { background: var(--brand-50);     color: var(--brand-700); }
+.badge-secondary { background: var(--surface-sunken); color: var(--ink-600); }
+
+.badge-dot {
+  padding: 0;
+  background: transparent;
+
+  i {
+    width: 7px;
+    height: 7px;
+    margin-right: 0.4rem;
+  }
+
+  .status {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-transform: none;
+    color: var(--ink-700);
+  }
+}
+
+// --- Progress ----------------------------------------------------------
+.progress {
+  height: 5px;
+  margin: 0.375rem 0 0;
+  background: var(--surface-sunken);
+  border-radius: var(--radius-pill);
+  box-shadow: none;
+}
+
+.progress-bar {
+  border-radius: var(--radius-pill);
+  transition: width 400ms var(--ease);
+}
+
+// --- Dropdowns ---------------------------------------------------------
+.dropdown-menu {
+  padding: 0.375rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ink-700);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+
+  i { width: 16px; color: var(--ink-400); }
+
+  &:hover, &:focus {
+    background: var(--surface-sunken);
+    color: var(--ink-900);
+  }
+}
+
+.dropdown-divider {
+  margin: 0.375rem 0;
+  border-color: var(--border);
+}
+
+.dropdown-header {
+  padding: 0.5rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+}
+
+// --- Modals ------------------------------------------------------------
+.modal-content {
+  border: 0;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 1.125rem 1.375rem;
+  border-bottom: 1px solid var(--border);
+
+  .modal-title {
+    font-size: 1rem;
+    font-weight: 650;
+  }
+}
+
+.modal-body { padding: 1.375rem; }
+
+.modal-footer {
+  padding: 0.875rem 1.375rem;
+  border-top: 1px solid var(--border);
+  gap: 0.5rem;
+}
+
+.modal-backdrop.show { opacity: 0.4; }
+
+// --- Pagination --------------------------------------------------------
+.pagination .page-link,
+.pagination .page-item .page-link {
+  min-width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm) !important;
+  margin: 0 2px;
+  color: var(--ink-600);
+  font-size: 0.8125rem;
+
+  &:hover {
+    background: var(--surface-sunken);
+    color: var(--ink-900);
+  }
+}
+
+.pagination .page-item.active .page-link {
+  background: var(--brand-600);
+  border-color: var(--brand-600);
+  color: #fff;
+  box-shadow: none;
+}
+
+// --- Alerts ------------------------------------------------------------
+.alert {
+  padding: 0.875rem 1rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+}
+
+.alert-warning { background: var(--warning-soft); border-color: #fde68a; color: #92400e; }
+.alert-danger  { background: var(--danger-soft);  border-color: #fecaca; color: #991b1b; }
+.alert-success { background: var(--success-soft); border-color: #a7f3d0; color: #065f46; }
+.alert-info    { background: var(--info-soft);    border-color: #bfdbfe; color: #1e40af; }
+
+// --- Angular Material overrides ----------------------------------------
+// The POS client picker is a mat-autocomplete; without this it renders in
+// Material's own Roboto/indigo and reads as a foreign control.
+.mat-form-field,
+.mat-option,
+.mat-autocomplete-panel {
+  font-family: var(--font-ui) !important;
+}
+
+.mat-autocomplete-panel {
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: var(--brand-600) !important;
+}
+
+.mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: var(--brand-600) !important;
+}

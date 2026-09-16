@@ -1,14 +1,18 @@
-<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8"></div>
-<div class="container-fluid">
+<div class="page-container container-fluid">
+  <div class="page-head">
+    <div>
+      <h1 class="page-head-title">Depots</h1>
+      <p class="page-head-sub">Entrepots, capacite et occupation</p>
+    </div>
+  </div>
   <div class="card maincard">
     <div class="card-head">
-      <h3 class="col-md-3">Dépôts</h3>
-      <div class="col-md-6 row">
+      <div class="col-md-8 row">
         <input
           placeholder="Chercher un dépôt par nom et prénom"
           type="text"
-          class="form-control-alternative text-center form-control col-md-11"
-          style="margin-right: 5px; max-height: 30px"
+          class="form-control-alternative form-control col-md-11"
+          style="margin-right: 8px"
           (change)="search = $event.target.value"
         />
         <button
@@ -20,7 +24,7 @@
           <i class="fas fa-search"></i>
         </button>
       </div>
-      <div class="col-md-3" style="text-align: end">
+      <div class="col-md-4" style="text-align: end">
         <div class="col-md-3" style="display: contents" ngbDropdown>
           <a class="btn btn-info btn-sm" ngbDropdownToggle>
             <span class="btn-inner--icon"
@@ -58,7 +62,7 @@
             <tr>
               <th scope="col">Nom</th>
               <th scope="col">Capacité</th>
-              <th scope="col">Capacité utilisé</th>
+              <th scope="col">Capacité utilisée</th>
               <th scope="col"></th>
             </tr>
           </thead>
@@ -67,9 +71,27 @@
               <th scope="row">
                 {{ Deposit.name }}
               </th>
-              <td>{{ Deposit.capacity}} mètre</td>
+              <td>{{ Deposit.capacity }} m³</td>
               <td>
-                {{ Deposit.used }} mètre
+                <span class="usage-value">{{ Deposit.used }} m³</span>
+                <!-- Occupancy bar: amber past 70%, red past 90%, so a deposit
+                     running out of room is visible without doing the maths. -->
+                <div class="progress">
+                  <div
+                    class="progress-bar"
+                    [ngClass]="{
+                      'bg-danger': (Deposit.used * 100) / Deposit.capacity >= 90,
+                      'bg-warning': (Deposit.used * 100) / Deposit.capacity >= 70
+                                 && (Deposit.used * 100) / Deposit.capacity < 90,
+                      'bg-success': (Deposit.used * 100) / Deposit.capacity < 70
+                    }"
+                    role="progressbar"
+                    [attr.aria-valuenow]="Deposit.used"
+                    aria-valuemin="0"
+                    [attr.aria-valuemax]="Deposit.capacity"
+                    [style.width.%]="(Deposit.used * 100) / Deposit.capacity"
+                  ></div>
+                </div>
               </td>
               <td class="text-right">
                 <div ngbDropdown placement="left">
@@ -83,7 +105,7 @@
                     ngbDropdownMenu
                     class="dropdown-menu-right dropdown-menu-arrow"
                   >
-                    <a class="dropdown-item" (click)="open2(inspect, '', '');inspectDeposit = Deposit;">Inspecter</a>
+                    <a class="dropdown-item" (click)="open2(inspect, '', '');inspectDepositRow(Deposit);">Inspecter</a>
                     <a class="dropdown-item" (click)="open(edit, '', '');editDeposit = Deposit;editingDeposit = editDeposit;index=i">Modifier</a>
                     <a class="dropdown-item" (click)="open(delete, '', '');deleteDeposit = Deposit;">Supprimer</a>
                   </div>
@@ -144,20 +166,20 @@
     </div>
     <div class="modal-body col">
       <form>
-        <h3>Nom:</h3>
+        <label class="form-control-label">Nom</label>
         <input
           placeholder="nom du dépôt"
           type="text"
-          class="form-control-alternative text-center form-control col-md-12"
+          class="form-control-alternative form-control col-md-12"
           style="margin-bottom: 12px"
           (change)="newDeposit.name = $event.target.value"
         />
 
-        <h3>Capacité:</h3>
+        <label class="form-control-label">Capacité</label>
         <input
           placeholder="capacité du dépôt"
           type="number"
-          class="form-control-alternative text-center form-control col-md-12"
+          class="form-control-alternative form-control col-md-12"
           style="margin-bottom: 12px"
           (change)="newDeposit.capacity = $event.target.value"
         />
@@ -193,32 +215,32 @@
     <div class="modal-body col">
       <form>
 
-      <h3>Nom</h3>
+      <label class="form-control-label">Nom</label>
       <input
         placeholder="nom du dépôt"
         type="text"
         [value]="editDeposit.name"
-        class="form-control-alternative text-center form-control col-md-12"
+        class="form-control-alternative form-control col-md-12"
         style="margin-bottom: 12px"
         (change)="editingDeposit.name = $event.target.value"
 
       />
-      <h3>Capacité</h3>
+      <label class="form-control-label">Capacité</label>
       <input
         placeholder="numéro du dépôt"
         type="number"
         [value]="editDeposit.capacity"
-        class="form-control-alternative text-center form-control col-md-12"
+        class="form-control-alternative form-control col-md-12"
         style="margin-bottom: 12px"
         (change)="editingDeposit.capacity = $event.target.value"
 
       />
-      <h3>Capacité utilisé</h3>
+      <label class="form-control-label">Capacité utilisé</label>
       <input
         placeholder="numéro du dépôt"
         type="number"
         [value]="editDeposit.used"
-        class="form-control-alternative text-center form-control col-md-12"
+        class="form-control-alternative form-control col-md-12"
         style="margin-bottom: 12px"
         (change)="editingDeposit.used = $event.target.value"
 

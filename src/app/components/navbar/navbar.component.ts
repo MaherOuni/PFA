@@ -1,8 +1,8 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
-import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { AuthenticationService } from '../../authentication.service';
+import { DemoService } from '../../demo/demo.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,33 +10,44 @@ import { AuthenticationService } from '../../authentication.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  public focus;
   public listTitles: any[];
   public location: Location;
-  constructor(location: Location,  private element: ElementRef, private router: Router,private auth:AuthenticationService) {
+
+  constructor(location: Location,
+              private auth: AuthenticationService,
+              private demo: DemoService) {
     this.location = location;
   }
 
   ngOnInit() {
     this.listTitles = ROUTES.filter(listTitle => listTitle);
   }
-  getTitle(){
-    var titlee = this.location.prepareExternalUrl(this.location.path());
-    if(titlee.charAt(0) === '#'){
-        titlee = titlee.slice( 1 );
+
+  /** Name shown on the account chip. */
+  get userName(): string {
+    return this.demo.active ? 'Mohamed Salah' : 'Mon compte';
+  }
+
+  getTitle() {
+    let titlee = this.location.prepareExternalUrl(this.location.path());
+    if (titlee.charAt(0) === '#') {
+        titlee = titlee.slice(1);
     }
 
-    for(var item = 0; item < this.listTitles.length; item++){
-        if(this.listTitles[item].path === titlee){
+    // The path can carry a query string (a shared ?demo=1 link, for one), so
+    // match on the path alone or the title falls back to 'Tableau de bord'.
+    const path = titlee.split('?')[0];
+
+    for (let item = 0; item < this.listTitles.length; item++) {
+        if (this.listTitles[item].path === path) {
             return this.listTitles[item].title;
         }
     }
-    return 'Dashboard';
+    return 'Tableau de bord';
   }
 
-  logout(){
-    localStorage.removeItem('jwt')
+  logout() {
+    localStorage.removeItem('jwt');
     this.auth.jwt = undefined;
   }
-
 }

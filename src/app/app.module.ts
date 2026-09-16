@@ -1,5 +1,7 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -27,6 +29,11 @@ import { LottieAnimationViewModule } from 'ng-lottie';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { StuffComponent } from './pages/stuff/stuff.component';
 import { AuthInterceptorService } from './auth-interceptor.service';
+
+// The UI is in French and the dashboard formats amounts with the `number`
+// pipe. Angular ships only en-US at runtime, so 'fr' has to be registered or
+// those pipes throw at render time.
+registerLocaleData(localeFr, 'fr');
 
 @NgModule({
   imports: [

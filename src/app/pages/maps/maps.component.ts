@@ -12,6 +12,18 @@ export class MapsComponent implements OnInit {
 
   ngOnInit() {
     let map = document.getElementById('map-canvas');
+
+    // index.html used to load the Google Maps SDK with a literal
+    // 'YOUR_API_KEY_HERE', so this page never rendered a map. The tag is gone;
+    // bail out quietly instead of throwing a ReferenceError on `google`. Add
+    // the SDK with a real key to bring the page back.
+    if (typeof google === 'undefined') {
+      map.innerHTML =
+        '<div class="p-4 text-center text-muted">' +
+        'Carte indisponible : aucune cle Google Maps configuree.</div>';
+      return;
+    }
+
     let lat = map.getAttribute('data-lat');
     let lng = map.getAttribute('data-lng');
 

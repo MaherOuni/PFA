@@ -1,0 +1,196 @@
+// =============================================================================
+// Shell: sidebar, top navbar, main content
+// =============================================================================
+
+// --- Sidebar -----------------------------------------------------------
+#sidenav-main {
+  width: var(--sidebar-width);
+  padding: 0;
+  background: var(--surface) !important;
+  border-right: 1px solid var(--border);
+  box-shadow: none;
+
+  > .container-fluid {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0 0.75rem 1rem;
+  }
+
+  .navbar-brand {
+    padding: 1.25rem 0.5rem 1rem;
+    margin: 0;
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    img {
+      width: 38px !important;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .brand-word {
+      margin: 0;
+      font-family: var(--font-brand);
+      font-size: 1.05rem;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: var(--ink-800);
+    }
+  }
+
+  // Small caps label above the nav list. Gives the rail a structure the old
+  // flat list did not have.
+  .nav-section-label {
+    padding: 0.25rem 0.75rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-400);
+  }
+
+  .navbar-nav {
+    width: 100%;
+    gap: 2px;
+  }
+
+  .nav-item { width: 100%; }
+
+  .nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 !important;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 500;
+    color: var(--ink-600) !important;
+    border-radius: var(--radius-md);
+    transition: background-color var(--speed) var(--ease),
+                color var(--speed) var(--ease);
+
+    lord-icon {
+      flex: 0 0 auto;
+      width: 26px !important;
+      height: 26px !important;
+    }
+
+    &:hover {
+      background: var(--surface-sunken);
+      color: var(--ink-900) !important;
+    }
+
+    // The active item is a filled pill with a short bar on the leading edge,
+    // so which page you are on reads at a glance instead of from a colour
+    // shift alone.
+    &.active {
+      background: var(--brand-50);
+      color: var(--brand-700) !important;
+      font-weight: 600;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 3px;
+        height: 18px;
+        border-radius: var(--radius-pill);
+        background: var(--brand-500);
+      }
+    }
+  }
+
+  // Pushes whatever follows it to the bottom of the rail.
+  .sidebar-spacer { flex: 1 1 auto; }
+
+  .sidebar-foot {
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.75rem;
+    color: var(--ink-400);
+  }
+}
+
+// --- Top navbar --------------------------------------------------------
+#navbar-main {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: 64px;
+  padding: 0 1.5rem;
+  // Translucent so content scrolling underneath stays faintly visible.
+  background: rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--border);
+
+  > .container-fluid {
+    padding: 0;
+  }
+
+  .page-title {
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: 1.0625rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    // The old markup shouted the title in white uppercase against the
+    // gradient. The bar is light now, so the title is ordinary ink.
+    color: var(--ink-900) !important;
+    text-transform: none !important;
+  }
+
+  .navbar-nav .nav-link {
+    color: var(--ink-600);
+  }
+
+  .user-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+    border-radius: var(--radius-pill);
+    transition: background-color var(--speed) var(--ease);
+
+    &:hover { background: var(--surface-sunken); }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--border);
+    }
+
+    .user-name {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--ink-800);
+    }
+  }
+}
+
+// --- Main content ------------------------------------------------------
+.main-content {
+  background: var(--canvas);
+  min-height: 100vh;
+}
+
+// Matches the selector Argon uses in angular-differences, so the two rules do
+// not fight over specificity when the width token changes.
+@media screen and (min-width: 768px) {
+  html:not(.auth-layout) .main-content {
+    margin-left: var(--sidebar-width);
+  }
+}
+
+@media screen and (max-width: 767.98px) {
+  .main-content { margin-left: 0; }
+}

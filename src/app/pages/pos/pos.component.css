@@ -2,28 +2,6 @@
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
-input {
-  border: 1px solid #d2b48c;
-}
-.badge {
-  margin: 0 3px 3px 0;
-  height: min-content;
-  cursor: pointer;
-}
-.badge:hover {
-  color: whitesmoke;
-  background-color: #fc8825;
-}
-#all:hover {
-  color: whitesmoke;
-  background-color: #f80031;
-}
-.categoriesDiv {
-  height: 45px;
-  display: flex;
-  overflow: hidden;
-  overflow-x: scroll;
-}
 #prodlist {
   margin: auto;
   padding: 4px;
@@ -46,21 +24,6 @@ input {
   font-size: 10px;
   font-weight: 400;
 }
-.prodcard {
-  margin: 5px;
-  box-shadow: 4px 4px 15px #464f4f1f;
-  cursor: pointer;
-  top: 0px;
-  transition: 0.3s;
-}
-.prodcard:hover {
-  position: relative;
-  top: -5px;
-}
-.maincard {
-  box-shadow: 5px 5px 20px #464f4f3a;
-}
-
 #btn-add {
   margin: auto;
   flex: 0;
@@ -79,18 +42,6 @@ input {
   padding: 0;
   text-align: center;
   font-weight: 400;
-}
-.payment {
-  width: 100%;
-  margin-right: 0 !important;
-  margin-left: 0;
-  border-radius: 6px;
-  background: #464f4f15;
-}
-.payment h4 {
-  margin-bottom: 12px;
-  margin-top: 12px;
-  color: #464f4f;
 }
 .validation {
   text-align: center;
@@ -125,7 +76,36 @@ input {
   font-weight: 500;
   color: rgb(48, 48, 48);
 }
-.container-fluid{
-  position: relative;
-  top:-10vh;
+/* Price on the product tile, added alongside the name and detail line. */
+.price {
+  /* Pinned to the bottom so every tile shows its price on the same line. */
+  margin: auto 0 0;
+  color: var(--brand-700);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Discount field in the payment panel. */
+.discount-field {
+  position: absolute;
+  right: 0;
+  width: 150px;
+  padding: 10px 15px;
+  margin: 0;
+}
+
+.discount-field .form-control {
+  text-align: right;
+}
+
+/* The spinner arrows ate most of an already narrow field, and stepping a
+   percentage one point at a time is not how anyone enters a discount. */
+.discount-field input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.discount-field input[type='number']::-webkit-outer-spin-button,
+.discount-field input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
